@@ -8,7 +8,7 @@ import ProductImage from "./ProductImage";
 import ProductModal, { Availability, WhatsAppButton } from "./ProductModal";
 import { ArrowIcon, InstagramIcon, SearchIcon } from "./icons";
 
-type Props = { products: Product[]; settings: StoreSettings | null; loadError: boolean };
+type Props = { products: Product[]; settings: StoreSettings | null; loadError: "config" | "network" | null };
 
 const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
@@ -66,7 +66,13 @@ export default function Storefront({ products, settings, loadError }: Props) {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 pb-28 sm:px-8">
-        {loadError && (
+        {loadError === "config" && (
+          <p className="mt-6 rounded-md border border-line bg-white px-4 py-3 text-sm text-ink-2">
+            <strong className="font-medium text-ink">Site em configuração.</strong> Falta cadastrar as chaves do Supabase
+            (NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY) na Vercel e fazer um novo deploy.
+          </p>
+        )}
+        {loadError === "network" && (
           <p className="mt-6 rounded-md border border-danger/20 bg-white px-4 py-3 text-sm text-danger">
             Não foi possível carregar o catálogo agora. Atualize a página em alguns instantes.
           </p>

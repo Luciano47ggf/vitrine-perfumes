@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { supabasePublic } from "@/lib/supabase/server";
+import { hasSupabaseEnv } from "@/lib/env";
 import Storefront from "@/components/storefront/Storefront";
 import { PRODUCT_COLUMNS, SETTINGS_COLUMNS, type Product, type StoreSettings } from "@/lib/types";
 
@@ -7,17 +8,25 @@ import { PRODUCT_COLUMNS, SETTINGS_COLUMNS, type Product, type StoreSettings } f
 // (/api/revalidate) e, por segurança, ela se renova sozinha a cada hora.
 export const revalidate = 3600;
 
-async function load() {
-  const db = supabasePublic();
-  const [products, settings] = await Promise.all([
-    db.from("products").select(PRODUCT_COLUMNS).order("is_available", { ascending: false }).order("name"),
-    db.from("store_settings").select(SETTINGS_COLUMNS).eq("id", 1).maybeSingle(),
-  ]);
-  return {
-    products: (products.data ?? []) as Product[],
-    settings: settings.data as StoreSettings | null,
-    failed: !!products.error,
-  };
+type LoadResult = { products: Product[]; settings: StoreSettings | null; error: "config" | "network" | null };
+
+async function load(): Promise<LoadResult> {
+  // Sem as chaves do Supabase o site publica mesmo assim, com aviso de configuração
+  if (!hasSupabaseEnv()) return { products: [], settings: null, error: "config" };
+  try {
+    const db = supabasePublic();
+    const [products, settings] = await Promise.all([
+      db.from("products").select(PRODUCT_COLUMNS).order("is_available", { ascending: false }).order("name"),
+      db.from("store_settings").select(SETTINGS_COLUMNS).eq("id", 1).maybeSingle(),
+    ]);
+    return {
+      products: (products.data ?? []) as Product[],
+      settings: settings.data as StoreSettings | null,
+      error: products.error ? "network" : null,
+    };
+  } catch {
+    return { products: [], settings: null, error: "network" };
+  }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -35,6 +44,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const { products, settings, failed } = await load();
-  return <Storefront products={products} settings={settings} loadError={failed} />;
+  const { products, settings, error } = await load();
+  return <Storefront products={products} settings={settings} loadError={error} />;
 }
