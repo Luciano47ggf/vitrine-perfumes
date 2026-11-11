@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { supabaseServer } from "@/lib/supabase/server";
 import AdminApp from "@/components/admin/AdminApp";
-import { hasSupabaseEnv } from "@/lib/env";
+import { SECRET_KEY_DETECTED, hasSupabaseEnv } from "@/lib/env";
 import { SETTINGS_COLUMNS, type StoreSettings } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +14,12 @@ export default async function AdminPage() {
         <div className="max-w-md rounded-xl border border-line bg-white p-8">
           <p className="label-caps text-bronze">Configuração pendente</p>
           <h1 className="mt-2 font-display text-3xl">Conecte o Supabase</h1>
+          {SECRET_KEY_DETECTED && (
+            <p className="mt-4 rounded-md border border-danger/30 px-3 py-2 text-sm text-danger">
+              Uma chave <strong>secreta</strong> foi cadastrada numa variável pública e foi ignorada. Apague essa chave no
+              Supabase (API Keys) e use a <strong>Publishable key</strong> (sb_publishable_…).
+            </p>
+          )}
           <ol className="mt-5 list-decimal space-y-2 pl-5 text-[15px] text-ink-2">
             <li>Na Vercel, abra o projeto → <strong className="font-medium text-ink">Settings → Environment Variables</strong>.</li>
             <li>

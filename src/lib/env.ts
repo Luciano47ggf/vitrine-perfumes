@@ -13,12 +13,32 @@ export const SUPABASE_URL = clean(
     process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL,
 );
 
-export const SUPABASE_KEY = clean(
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_KEY,
-);
+/** Chave secreta (sb_secret_… ou JWT service_role) nunca pode ir para o navegador. */
+function isSecretKey(key: string): boolean {
+  if (key.startsWith("sb_secret_")) return true;
+  const parts = key.split(".");
+  if (parts.length === 3) {
+    try {
+      const b64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+      const json = JSON.parse(typeof atob === "function" ? atob(b64) : Buffer.from(b64, "base64").toString("utf8"));
+      return json?.role === "service_role";
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
+
+// Usa a primeira chave PÚBLICA encontrada; chaves secretas são ignoradas.
+const candidates = [
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY,
+  process.env.NEXT_PUBLIC_SUPABASE_KEY,
+].map(clean);
+
+export const SECRET_KEY_DETECTED = candidates.some((k) => !!k && isSecretKey(k));
+export const SUPABASE_KEY = candidates.find((k) => !!k && !isSecretKey(k)) ?? "";
 
 /** true quando as duas chaves foram cadastradas (local: .env.local · Vercel: Environment Variables). */
 export function hasSupabaseEnv(): boolean {

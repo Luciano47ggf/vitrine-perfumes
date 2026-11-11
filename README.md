@@ -48,7 +48,8 @@ Catálogo de perfumes de alto padrão com pedidos pelo WhatsApp e um painel simp
    select id from auth.users where email = 'email-do-rafael@exemplo.com';
    ```
 6. **Authentication → Sign In / Providers** → desligue **Allow new users to sign up** (ninguém mais cria conta).
-7. **Project Settings → API**: copie a **Project URL** e a chave **anon public**.
+7. **Project Settings → API Keys**: copie a **Project URL** e a **Publishable key** (`sb_publishable_...`).
+   > ⚠️ **Nunca** use a **Secret key** (`sb_secret_...`) nem a `service_role`. Elas dão acesso total ao banco. O site recusa essas chaves, mas, se uma delas for colada por engano, apague-a no Supabase e gere outra.
 
 ### 2. Vercel (hospedagem)
 1. Entre em [vercel.com](https://vercel.com) com a conta do GitHub.
@@ -58,7 +59,7 @@ Catálogo de perfumes de alto padrão com pedidos pelo WhatsApp e um painel simp
    | Nome | Valor |
    |---|---|
    | `NEXT_PUBLIC_SUPABASE_URL` | Project URL do Supabase |
-   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | chave anon public |
+   | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Publishable key (`sb_publishable_...`) |
 
 4. **Deploy**. Em cerca de 1 minuto o site estará em `https://seu-projeto.vercel.app`.
 
@@ -73,7 +74,7 @@ Catálogo de perfumes de alto padrão com pedidos pelo WhatsApp e um painel simp
 
 ## Rodar no computador (opcional)
 ```bash
-cp .env.example .env.local   # cole a URL e a chave anon
+cp .env.example .env.local   # cole a URL e a Publishable key
 npm install
 npm run dev                  # http://localhost:3000  e  /admin
 ```

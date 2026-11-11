@@ -69,7 +69,7 @@ export default function Storefront({ products, settings, loadError }: Props) {
         {loadError === "config" && (
           <p className="mt-6 rounded-md border border-line bg-white px-4 py-3 text-sm text-ink-2">
             <strong className="font-medium text-ink">Site em configuração.</strong> Falta cadastrar as chaves do Supabase
-            (NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY) na Vercel e fazer um novo deploy.
+            (NEXT_PUBLIC_SUPABASE_URL e a Publishable key) na Vercel e fazer um novo deploy.
           </p>
         )}
         {loadError === "network" && (
