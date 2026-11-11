@@ -17,3 +17,10 @@ export function friendlyError(error: unknown): string {
   if (/exceeded the maximum allowed size|Payload too large/i.test(msg)) return "Imagem muito grande (máx. 5 MB).";
   return msg;
 }
+
+/** Sessão expirada ou ausente: o painel manda de volta para o login. */
+export function isAuthError(error: unknown): boolean {
+  const e = error as { message?: string; code?: string; status?: number } | null;
+  const msg = e?.message ?? "";
+  return e?.status === 401 || e?.code === "PGRST301" || /JWT expired|invalid JWT|Auth session missing|refresh token/i.test(msg);
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Product, StoreSettings } from "@/lib/types";
 import { formatBRL } from "@/lib/money";
 import { instagramUrl, searchOrderMessage, waLink } from "@/lib/whatsapp";
@@ -12,6 +12,10 @@ type Props = { products: Product[]; settings: StoreSettings | null; loadError: "
 
 const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
+/** "Dior" + "Sauvage Elixir" -> "dior-sauvage-elixir" (link próprio de cada perfume) */
+export const productSlug = (p: Pick<Product, "brand" | "name">) =>
+  normalize(`${p.brand} ${p.name}`).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+
 export default function Storefront({ products, settings, loadError }: Props) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Product | null>(null);
@@ -22,6 +26,42 @@ export default function Storefront({ products, settings, loadError }: Props) {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Abrir perfume cria uma entrada no histórico: o "voltar" do celular fecha o perfume
+  // em vez de sair do site, e o endereço (#marca-nome) pode ser compartilhado.
+  const findBySlug = useCallback(
+    (hash: string) => {
+      const slug = decodeURIComponent(hash.replace(/^#/, ""));
+      return slug ? products.find((p) => productSlug(p) === slug) ?? null : null;
+    },
+    [products],
+  );
+
+  useEffect(() => {
+    const fromLink = findBySlug(window.location.hash);
+    if (fromLink) {
+      setSelected(fromLink);
+      history.replaceState({ perfume: fromLink.id, direct: true }, "", window.location.hash);
+    }
+    const onPop = () => setSelected(findBySlug(window.location.hash));
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, [findBySlug]);
+
+  const openProduct = useCallback((p: Product) => {
+    setSelected(p);
+    history.pushState({ perfume: p.id }, "", `#${productSlug(p)}`);
+  }, []);
+
+  const closeProduct = useCallback(() => {
+    const state = history.state as { perfume?: string; direct?: boolean } | null;
+    if (state?.perfume && !state.direct) {
+      history.back(); // o popstate fecha a janela
+    } else {
+      setSelected(null);
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
   }, []);
 
   const storeName = settings?.store_name ?? "Perfumaria";
@@ -66,6 +106,10 @@ export default function Storefront({ products, settings, loadError }: Props) {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 pb-28 sm:px-8">
+        <h1 className="sr-only">
+          {storeName}
+          {settings?.tagline ? ` — ${settings.tagline}` : ""}: catálogo de perfumes
+        </h1>
         {loadError === "config" && (
           <p className="mt-6 rounded-md border border-line bg-white px-4 py-3 text-sm text-ink-2">
             <strong className="font-medium text-ink">Site em configuração.</strong> Falta cadastrar as chaves do Supabase
@@ -78,7 +122,7 @@ export default function Storefront({ products, settings, loadError }: Props) {
           </p>
         )}
 
-        {featured.length > 0 && <Featured items={featured} onOpen={setSelected} />}
+        {featured.length > 0 && <Featured items={featured} onOpen={openProduct} />}
 
         {/* Catálogo */}
         <section className="pt-16 sm:pt-24" aria-labelledby="catalogo">
@@ -127,7 +171,7 @@ export default function Storefront({ products, settings, loadError }: Props) {
             <ul className="grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4">
               {filtered.map((p, i) => (
                 <li key={p.id} className="animate-rise" style={{ animationDelay: `${Math.min(i, 11) * 55}ms` }}>
-                  <button onClick={() => setSelected(p)} className="group block w-full text-left">
+                  <button onClick={() => openProduct(p)} className="group block w-full text-left">
                     <div className="sheen relative aspect-[4/5] overflow-hidden rounded-[3px] bg-mist">
                       <div className={`absolute inset-0 bg-mist transition-transform duration-[1200ms] ease-[var(--ease-lux)] group-hover:scale-[1.05] ${p.is_available ? "" : "opacity-60 grayscale"}`}>
                         <ProductImage product={p} sizes="(min-width: 1024px) 270px, (min-width: 768px) 30vw, 46vw" priority={i < 4 && featured.length === 0} />
@@ -159,7 +203,15 @@ export default function Storefront({ products, settings, loadError }: Props) {
         </div>
       </footer>
 
-      {selected && <ProductModal product={selected} whatsapp={settings?.whatsapp ?? null} onClose={() => setSelected(null)} />}
+      {selected && (
+        <ProductModal
+          key={selected.id}
+          product={selected}
+          whatsapp={settings?.whatsapp ?? null}
+          shareUrl={`#${productSlug(selected)}`}
+          onClose={closeProduct}
+        />
+      )}
     </div>
   );
 }
@@ -203,9 +255,9 @@ function Featured({ items, onOpen }: { items: Product[]; onOpen: (p: Product) =>
               Promoção{many && <span className="ml-3 tabular-nums text-ink-3">{String(index + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}</span>}
             </p>
             <p className="label-caps mt-6 animate-rise text-ink-2" style={{ animationDelay: "90ms" }}>{current.brand}</p>
-            <h1 className="mt-2 animate-rise text-balance font-display text-[40px] leading-[1.02] sm:text-[56px]" style={{ animationDelay: "150ms" }}>
+            <h2 className="mt-2 animate-rise text-balance font-display text-[40px] leading-[1.02] sm:text-[56px]" style={{ animationDelay: "150ms" }}>
               {current.name}
-            </h1>
+            </h2>
             {current.description && (
               <p className="mt-5 line-clamp-3 max-w-[42ch] animate-rise font-light leading-relaxed text-ink-2" style={{ animationDelay: "220ms" }}>
                 {current.description}

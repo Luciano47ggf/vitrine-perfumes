@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Modal, { Spinner, Switch } from "@/components/ui/Modal";
 import { useToast } from "@/components/ui/Toast";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { friendlyError } from "@/lib/errors";
 import { centsToInput, parseBRL } from "@/lib/money";
-import { compressImage, extensionFor } from "@/lib/image";
+import { ImageFormatError, compressImage, extensionFor } from "@/lib/image";
 import { IMAGE_BUCKET, publicImageUrl } from "@/lib/storage";
 import { PRODUCT_COLUMNS, type Product } from "@/lib/types";
 import { normalizeAccords, type Accord } from "@/lib/accords";
@@ -34,6 +34,27 @@ export default function ProductFormModal({ product, onClose, onSaved }: Props) {
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Foto do formulário: compara com o estado inicial para avisar antes de descartar alterações
+  const initial = useRef(
+    JSON.stringify([product?.name ?? "", product?.brand ?? "", product?.volume_ml?.toString() ?? "", centsToInput(product?.price_cents),
+      product?.description ?? "", product?.is_available ?? true, product?.is_featured ?? false, normalizeAccords(product?.accords)]),
+  );
+  const dirty = useMemo(
+    () => !!file || JSON.stringify([name, brand, volume, price, description, available, featured, accords]) !== initial.current,
+    [file, name, brand, volume, price, description, available, featured, accords],
+  );
+
+  function requestClose() {
+    if (saving) return; // não fecha no meio do salvamento
+    if (dirty && !window.confirm("Descartar as alterações deste perfume?")) return;
+    onClose();
+  }
+
+  function formatPriceOnBlur() {
+    const cents = price.trim() ? parseBRL(price) : null;
+    if (cents != null) setPrice(centsToInput(cents));
+  }
+
   useEffect(() => {
     if (!file) return;
     const url = URL.createObjectURL(file);
@@ -58,18 +79,24 @@ export default function ProductFormModal({ product, onClose, onSaved }: Props) {
     const priceCents = price.trim() ? parseBRL(price) : null;
     if (price.trim() && priceCents === null) return setError("Preço inválido. Ex.: 890,00");
 
+    const oldPath = product?.image_path ?? null;
+    let uploadedPath: string | null = null;
     try {
-      let imagePath = product?.image_path ?? null;
+      // 1) envia a foto nova (a antiga continua intacta por enquanto)
       if (file) {
         setSaving("image");
         const blob = await compressImage(file);
-        const path = `products/${crypto.randomUUID()}.${extensionFor(blob.type)}`;
-        const { error: upErr } = await db.storage.from(IMAGE_BUCKET).upload(path, blob, { contentType: blob.type, cacheControl: "31536000" });
-        if (upErr) throw upErr;
-        if (imagePath) await db.storage.from(IMAGE_BUCKET).remove([imagePath]);
-        imagePath = path;
+        uploadedPath = `products/${crypto.randomUUID()}.${extensionFor(blob.type)}`;
+        const { error: upErr } = await db.storage
+          .from(IMAGE_BUCKET)
+          .upload(uploadedPath, blob, { contentType: blob.type, cacheControl: "31536000" });
+        if (upErr) {
+          uploadedPath = null;
+          throw upErr;
+        }
       }
 
+      // 2) salva o cadastro
       setSaving("data");
       const payload = {
         name: name.trim(),
@@ -80,18 +107,23 @@ export default function ProductFormModal({ product, onClose, onSaved }: Props) {
         is_available: available,
         is_featured: featured,
         accords: normalizeAccords(accords),
-        image_path: imagePath,
+        image_path: uploadedPath ?? oldPath,
       };
       const { data, error } = product
         ? await db.from("products").update(payload).eq("id", product.id).select(PRODUCT_COLUMNS).single()
         : await db.from("products").insert(payload).select(PRODUCT_COLUMNS).single();
       if (error) throw error;
 
+      // 3) só agora apaga a foto antiga (se foi trocada)
+      if (uploadedPath && oldPath) await db.storage.from(IMAGE_BUCKET).remove([oldPath]);
+
       onSaved(data as Product);
       toast("ok", product ? "Perfume atualizado." : "Perfume cadastrado.");
       onClose();
     } catch (err) {
-      setError(friendlyError(err));
+      // Se o cadastro falhou, remove a foto nova para não deixar arquivo perdido
+      if (uploadedPath) await db.storage.from(IMAGE_BUCKET).remove([uploadedPath]).catch(() => {});
+      setError(err instanceof ImageFormatError ? err.message : friendlyError(err));
     } finally {
       setSaving(null);
     }
@@ -100,10 +132,10 @@ export default function ProductFormModal({ product, onClose, onSaved }: Props) {
   return (
     <Modal
       title={product ? "Editar perfume" : "Novo perfume"}
-      onClose={onClose}
+      onClose={requestClose}
       footer={
         <>
-          <button className="btn btn-ghost" onClick={onClose}>Cancelar</button>
+          <button className="btn btn-ghost" onClick={requestClose} disabled={!!saving}>Cancelar</button>
           <button className="btn btn-primary min-w-28" onClick={save} disabled={!!saving}>
             {saving && <Spinner />} {saving === "image" ? "Enviando foto…" : saving === "data" ? "Salvando…" : "Salvar"}
           </button>
@@ -155,7 +187,7 @@ export default function ProductFormModal({ product, onClose, onSaved }: Props) {
           <label className="label" htmlFor="p-price">Preço (opcional)</label>
           <div className="relative">
             <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-ink-3">R$</span>
-            <input id="p-price" className="field pl-10" inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="890,00" />
+            <input id="p-price" className="field pl-10 tabular-nums" inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} onBlur={formatPriceOnBlur} placeholder="890,00" />
           </div>
         </div>
         <div>

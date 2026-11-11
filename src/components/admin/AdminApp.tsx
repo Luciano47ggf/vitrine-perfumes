@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/client";
-import { friendlyError } from "@/lib/errors";
+import { friendlyError, isAuthError } from "@/lib/errors";
 import { formatBRL } from "@/lib/money";
 import { IMAGE_BUCKET, publicImageUrl } from "@/lib/storage";
 import { PRODUCT_COLUMNS, type Product, type StoreSettings } from "@/lib/types";
@@ -10,6 +10,13 @@ import { ToastProvider, useToast } from "@/components/ui/Toast";
 import Modal, { Spinner, Switch } from "@/components/ui/Modal";
 import ProductFormModal from "./ProductFormModal";
 import SettingsModal from "./SettingsModal";
+
+const normalize = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+/** Login expirou: volta para a tela de entrar. */
+function goToLogin() {
+  window.location.href = "/admin/login";
+}
 
 /** Avisa a vitrine (que fica em cache) para mostrar as mudanças na hora. */
 export function refreshStorefront() {
@@ -38,7 +45,9 @@ function Panel({ initialSettings }: { initialSettings: StoreSettings }) {
   const [busyId, setBusyId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
+    setLoading(true);
     const { data, error } = await db.from("products").select(PRODUCT_COLUMNS).order("updated_at", { ascending: false });
+    if (error && isAuthError(error)) return goToLogin();
     if (error) setError(friendlyError(error));
     else {
       setError(null);
@@ -52,8 +61,8 @@ function Panel({ initialSettings }: { initialSettings: StoreSettings }) {
   }, [load]);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return q ? products.filter((p) => `${p.name} ${p.brand}`.toLowerCase().includes(q)) : products;
+    const q = normalize(query.trim());
+    return q ? products.filter((p) => normalize(`${p.name} ${p.brand}`).includes(q)) : products;
   }, [products, query]);
 
   const counts = useMemo(
@@ -68,6 +77,7 @@ function Panel({ initialSettings }: { initialSettings: StoreSettings }) {
     setBusyId(null);
     if (error) {
       setProducts((list) => list.map((x) => (x.id === p.id ? { ...x, [field]: !value } : x)));
+      if (isAuthError(error)) return goToLogin();
       return toast("error", friendlyError(error));
     }
     refreshStorefront();
@@ -82,6 +92,7 @@ function Panel({ initialSettings }: { initialSettings: StoreSettings }) {
     if (!error && p.image_path) await db.storage.from(IMAGE_BUCKET).remove([p.image_path]);
     setBusyId(null);
     setDeleting(null);
+    if (error && isAuthError(error)) return goToLogin();
     if (error) return toast("error", friendlyError(error));
     setProducts((list) => list.filter((x) => x.id !== p.id));
     refreshStorefront();
@@ -132,15 +143,20 @@ function Panel({ initialSettings }: { initialSettings: StoreSettings }) {
           aria-label="Pesquisar perfumes"
         />
 
-        {error && <p className="mb-4 rounded-md border border-danger/20 bg-white px-4 py-3 text-sm text-danger">{error}</p>}
+        {error && (
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-md border border-danger/20 bg-white px-4 py-3 text-sm text-danger">
+            <span>{error}</span>
+            <button className="btn btn-ghost px-3 py-1.5 text-xs" onClick={load}>Tentar de novo</button>
+          </div>
+        )}
 
         <div className="overflow-hidden rounded-xl border border-line bg-white">
           {loading ? (
             <div className="flex items-center justify-center gap-2 py-20 text-ink-2"><Spinner /> Carregando perfumes…</div>
           ) : filtered.length === 0 ? (
             <div className="py-20 text-center">
-              <p className="text-ink-2">{products.length === 0 ? "Nenhum perfume cadastrado ainda." : "Nenhum perfume encontrado."}</p>
-              {products.length === 0 && (
+              <p className="text-ink-2">{products.length === 0 ? (error ? "Não foi possível carregar os perfumes." : "Nenhum perfume cadastrado ainda.") : "Nenhum perfume encontrado."}</p>
+              {products.length === 0 && !error && (
                 <button className="btn btn-primary mt-5" onClick={() => setEditing("new")}>Cadastrar o primeiro</button>
               )}
             </div>

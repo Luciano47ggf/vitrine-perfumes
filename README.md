@@ -17,14 +17,17 @@ Catálogo de perfumes de alto padrão com pedidos pelo WhatsApp e um painel simp
 - **Chamar no WhatsApp** com a mensagem pronta, já com o nome do perfume.
 - Perfume indisponível → botão **Encomendar pelo WhatsApp**.
 - Busca sem resultado → botão para encomendar o perfume digitado.
+- Cada perfume tem link próprio (ex.: `site.com/#dior-sauvage-elixir`) e botão **Compartilhar este perfume**; o “voltar” do celular fecha o perfume sem sair do site.
+- Link do site no WhatsApp/Instagram mostra uma imagem de capa com o nome da loja.
 
 **Painel (`/admin`, com login e senha)**
 - Lista de perfumes com busca e contadores.
 - Cadastrar, editar e excluir (com confirmação).
 - Liga/desliga **Disponível** e **Promoção** direto na lista.
-- Foto reduzida automaticamente antes do envio (máx. 1600 px, WebP).
+- Foto reduzida automaticamente antes do envio (máx. 1600 px, WebP); a foto antiga só é apagada depois que o cadastro é salvo.
+- Aviso antes de fechar o cadastro com alterações não salvas; preço formatado automaticamente.
 - Acordes: toque para escolher (até 10, entre 26) e arraste para ajustar a intensidade.
-- ⚙ Configurações: nome da loja, frase curta, WhatsApp e Instagram.
+- ⚙ Configurações: nome da loja, frase curta, WhatsApp (com botão “Testar número”) e Instagram (aceita @ ou o link do perfil).
 
 **Desempenho e segurança**
 - Vitrine em cache: abre instantaneamente e atualiza na hora quando algo é salvo no painel.

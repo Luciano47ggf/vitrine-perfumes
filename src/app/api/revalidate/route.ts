@@ -11,6 +11,6 @@ export async function POST() {
   const db = await supabaseServer();
   const { data: isAdmin } = await db.rpc("is_admin");
   if (!isAdmin) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  revalidatePath("/");
+  revalidatePath("/", "layout"); // vitrine + imagem de prévia do link
   return NextResponse.json({ ok: true });
 }

@@ -8,16 +8,36 @@ import ProductImage from "./ProductImage";
 import { WhatsAppIcon } from "./icons";
 import AccordBars from "./AccordBars";
 
-type Props = { product: Product; whatsapp: string | null; onClose: () => void };
+type Props = { product: Product; whatsapp: string | null; shareUrl: string; onClose: () => void };
 
-export default function ProductModal({ product, whatsapp, onClose }: Props) {
+export default function ProductModal({ product, whatsapp, shareUrl, onClose }: Props) {
   const [closing, setClosing] = useState(false);
+  const [shared, setShared] = useState(false);
   const closeBtn = useRef<HTMLButtonElement>(null);
 
+  const closingRef = useRef(false);
   const close = useCallback(() => {
+    if (closingRef.current) return; // evita fechar duas vezes (clique duplo)
+    closingRef.current = true;
     setClosing(true);
     setTimeout(onClose, 260);
   }, [onClose]);
+
+  async function share() {
+    const url = new URL(shareUrl, window.location.href).toString();
+    const title = [product.brand, product.name].filter(Boolean).join(" ");
+    try {
+      if (navigator.share) {
+        await navigator.share({ title, url });
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      setShared(true);
+      setTimeout(() => setShared(false), 2200);
+    } catch {
+      /* compartilhamento cancelado */
+    }
+  }
 
   useEffect(() => {
     closeBtn.current?.focus({ preventScroll: true });
@@ -109,6 +129,16 @@ export default function ProductModal({ product, whatsapp, onClose }: Props) {
                 {canOrder ? "A conversa abre com o nome do perfume já escrito." : "Sem estoque agora, mas podemos encomendar para você."}
               </p>
             )}
+            <button
+              type="button"
+              onClick={share}
+              className="mx-auto mt-4 flex items-center gap-2 text-[12px] tracking-wide text-ink-2 underline-offset-4 transition hover:text-ink hover:underline"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+                <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v14" />
+              </svg>
+              {shared ? "Link copiado!" : "Compartilhar este perfume"}
+            </button>
           </div>
         </div>
       </div>

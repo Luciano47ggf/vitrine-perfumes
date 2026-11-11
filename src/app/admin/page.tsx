@@ -24,7 +24,7 @@ export default async function AdminPage() {
             <li>Na Vercel, abra o projeto → <strong className="font-medium text-ink">Settings → Environment Variables</strong>.</li>
             <li>
               Adicione <code className="rounded bg-mist px-1">NEXT_PUBLIC_SUPABASE_URL</code> e{" "}
-              <code className="rounded bg-mist px-1">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> (Supabase → Project Settings → API).
+              <code className="rounded bg-mist px-1">NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code> com a Publishable key (Supabase → Project Settings → API Keys).
             </li>
             <li>Em <strong className="font-medium text-ink">Deployments</strong>, clique em ⋯ → <strong className="font-medium text-ink">Redeploy</strong>.</li>
           </ol>
@@ -46,7 +46,8 @@ export default async function AdminPage() {
         <div>
           <h1 className="font-display text-3xl">Acesso não autorizado</h1>
           <p className="mt-2 text-ink-2">
-            A conta {user.email} não está cadastrada como administradora. Veja o passo “Tornar-se admin” no README.
+            A conta {user.email} ainda não é administradora. No Supabase, abra o SQL Editor e rode o comando
+            “insert into public.admins …” do README com este e-mail.
           </p>
           <form action="/admin/logout" method="post" className="mt-6">
             <button className="btn btn-ghost">Sair</button>
@@ -56,6 +57,8 @@ export default async function AdminPage() {
     );
   }
 
-  const { data: settings } = await db.from("store_settings").select(SETTINGS_COLUMNS).eq("id", 1).single();
-  return <AdminApp initialSettings={settings as StoreSettings} />;
+  const { data: settings } = await db.from("store_settings").select(SETTINGS_COLUMNS).eq("id", 1).maybeSingle();
+  // Garantia: se a linha de configurações faltar, o painel abre com valores padrão em vez de quebrar
+  const fallback: StoreSettings = { id: 1, store_name: "Rafael", tagline: "Perfumaria masculina", whatsapp: null, instagram: null };
+  return <AdminApp initialSettings={(settings as StoreSettings | null) ?? fallback} />;
 }
