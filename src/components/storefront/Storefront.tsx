@@ -129,7 +129,7 @@ export default function Storefront({ products, settings, loadError }: Props) {
                 <li key={p.id} className="animate-rise" style={{ animationDelay: `${Math.min(i, 11) * 55}ms` }}>
                   <button onClick={() => setSelected(p)} className="group block w-full text-left">
                     <div className="sheen relative aspect-[4/5] overflow-hidden rounded-[3px] bg-mist">
-                      <div className={`absolute inset-0 transition-transform duration-[1200ms] ease-[var(--ease-lux)] group-hover:scale-[1.05] ${p.is_available ? "" : "opacity-60 grayscale"}`}>
+                      <div className={`absolute inset-0 bg-mist transition-transform duration-[1200ms] ease-[var(--ease-lux)] group-hover:scale-[1.05] ${p.is_available ? "" : "opacity-60 grayscale"}`}>
                         <ProductImage product={p} sizes="(min-width: 1024px) 270px, (min-width: 768px) 30vw, 46vw" priority={i < 4 && featured.length === 0} />
                       </div>
                       {p.is_featured && (
@@ -230,7 +230,7 @@ function Featured({ items, onOpen }: { items: Product[]; onOpen: (p: Product) =>
                   onClick={() => setIndex(i)}
                   className="group relative h-14 w-11 shrink-0 overflow-hidden rounded-[3px] bg-mist"
                 >
-                  <ProductImage product={p} sizes="44px" className={`transition duration-500 ${i === index ? "" : "opacity-55 grayscale group-hover:opacity-90"}`} />
+                  <ProductImage product={p} sizes="44px" pad="sm" className={`transition duration-500 ${i === index ? "" : "opacity-55 grayscale group-hover:opacity-90"}`} />
                   <span className="absolute inset-x-0 bottom-0 h-[2px] bg-ink/10">
                     {i === index &&
                       (reducedMotion ? (
@@ -255,12 +255,12 @@ function Featured({ items, onOpen }: { items: Product[]; onOpen: (p: Product) =>
           {items.map((p, i) => (
             <div
               key={p.id}
-              className={`absolute inset-0 transition-[opacity,transform] duration-[1400ms] ease-[var(--ease-lux)] ${
+              className={`absolute inset-0 bg-mist transition-[opacity,transform] duration-[1400ms] ease-[var(--ease-lux)] ${
                 i === index ? "scale-100 opacity-100" : "scale-[1.06] opacity-0"
               }`}
               aria-hidden={i !== index}
             >
-              <ProductImage product={p} sizes="(min-width: 768px) 600px, 100vw" priority={i === 0} />
+              <ProductImage product={p} sizes="(min-width: 768px) 600px, 100vw" priority={i === 0} pad="lg" />
             </div>
           ))}
         </button>

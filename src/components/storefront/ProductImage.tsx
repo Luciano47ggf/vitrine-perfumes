@@ -7,10 +7,17 @@ type Props = {
   sizes: string;
   priority?: boolean;
   className?: string;
+  /** espaço em volta do frasco (a foto aparece sempre inteira) */
+  pad?: "none" | "sm" | "md" | "lg";
 };
 
-/** Foto otimizada (next/image) ou, sem foto, um frasco desenhado discreto. */
-export default function ProductImage({ product, sizes, priority, className = "" }: Props) {
+const PAD = { none: "", sm: "p-[6%]", md: "p-[9%]", lg: "p-[11%]" } as const;
+
+/**
+ * Foto otimizada (next/image), sempre INTEIRA (object-contain).
+ * mix-blend-multiply faz o fundo branco da foto se misturar ao fundo do site.
+ */
+export default function ProductImage({ product, sizes, priority, className = "", pad = "md" }: Props) {
   const url = publicImageUrl(product.image_path);
   if (!url) {
     return (
@@ -26,7 +33,7 @@ export default function ProductImage({ product, sizes, priority, className = "" 
       fill
       sizes={sizes}
       priority={priority}
-      className={`object-cover ${className}`}
+      className={`object-contain mix-blend-multiply ${PAD[pad]} ${className}`}
     />
   );
 }

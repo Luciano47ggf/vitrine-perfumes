@@ -128,7 +128,7 @@ export default function ProductFormModal({ product, onClose, onSaved }: Props) {
         >
           <div className="relative h-24 w-[76px] shrink-0 overflow-hidden rounded-[3px] bg-mist">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            {preview && <img src={preview} alt="" className="h-full w-full animate-fade object-cover" />}
+            {preview && <img src={preview} alt="" className="h-full w-full animate-fade object-contain p-1.5 mix-blend-multiply" />}
           </div>
           <div>
             <p className="text-sm font-medium">{preview ? "Trocar foto" : "Adicionar foto"}</p>

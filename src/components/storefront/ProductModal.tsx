@@ -57,8 +57,8 @@ export default function ProductModal({ product, whatsapp, onClose }: Props) {
         </button>
 
         <div className="relative aspect-[4/3.6] w-full shrink-0 overflow-hidden bg-mist sm:aspect-auto sm:min-h-[560px] sm:w-[52%]">
-          <div className="absolute inset-0 animate-settle">
-            <ProductImage product={product} sizes="(min-width: 640px) 460px, 100vw" priority />
+          <div className="absolute inset-0 animate-settle bg-mist">
+            <ProductImage product={product} sizes="(min-width: 640px) 460px, 100vw" priority pad="lg" />
           </div>
         </div>
 

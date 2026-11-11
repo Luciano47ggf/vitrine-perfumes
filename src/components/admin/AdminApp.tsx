@@ -152,7 +152,7 @@ function Panel({ initialSettings }: { initialSettings: StoreSettings }) {
                   <li key={p.id} className="flex animate-rise flex-wrap items-center gap-4 px-4 py-4 sm:flex-nowrap sm:px-5" style={{ animationDelay: `${Math.min(i, 10) * 35}ms` }}>
                     <div className="relative h-16 w-[52px] shrink-0 overflow-hidden rounded-[3px] bg-mist">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      {img && <img src={img} alt="" loading="lazy" className="h-full w-full object-cover" />}
+                      {img && <img src={img} alt="" loading="lazy" className="h-full w-full object-contain p-1 mix-blend-multiply" />}
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="label-caps text-[9.5px] text-ink-3">{p.brand || "—"}</p>

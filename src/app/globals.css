@@ -101,26 +101,28 @@ body {
   transform: translateX(120%);
 }
 
-/* Campos e botões do painel */
-.field {
-  @apply w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink outline-none transition
-    placeholder:text-ink-3 focus:border-ink;
-}
-.label {
-  @apply mb-1.5 block text-[12px] font-medium tracking-wide text-ink-2;
-}
-.btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium tracking-wide transition
-    duration-300 disabled:cursor-not-allowed disabled:opacity-50;
-}
-.btn-primary {
-  @apply bg-ink text-porcelain hover:bg-ink/85;
-}
-.btn-ghost {
-  @apply border border-line bg-white text-ink hover:border-ink;
-}
-.btn-danger {
-  @apply border border-danger/30 bg-white text-danger hover:bg-danger hover:text-white;
+/* Campos e botões do painel (camada "components": classes como pl-10 ou px-3 têm prioridade) */
+@layer components {
+  .field {
+    @apply w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink outline-none transition
+      placeholder:text-ink-3 focus:border-ink;
+  }
+  .label {
+    @apply mb-1.5 block text-[12px] font-medium tracking-wide text-ink-2;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium tracking-wide transition
+      duration-300 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-ink text-porcelain hover:bg-ink/85;
+  }
+  .btn-ghost {
+    @apply border border-line bg-white text-ink hover:border-ink;
+  }
+  .btn-danger {
+    @apply border border-danger/30 bg-white text-danger hover:bg-danger hover:text-white;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
