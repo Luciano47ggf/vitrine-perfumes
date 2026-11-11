@@ -102,14 +102,19 @@ function Panel({ initialSettings }: { initialSettings: StoreSettings }) {
   return (
     <div className="min-h-dvh">
       <header className="border-b border-line bg-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-4 sm:px-8">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-8 sm:py-4">
           <div className="min-w-0">
             <p className="truncate font-display text-xl tracking-[0.03em]">{settings.store_name}</p>
             <p className="label-caps mt-1 text-[9.5px] text-ink-3">Painel · Produtos</p>
           </div>
           <div className="flex items-center gap-2">
-            <a href="/" target="_blank" className="btn btn-ghost px-3 py-2 text-xs">Ver site</a>
-            <button onClick={() => setShowSettings(true)} className="btn btn-ghost px-3 py-2 text-xs" aria-label="Configurações da loja">
+            <a href="/" target="_blank" className="btn btn-ghost min-h-10 px-3 py-2 text-xs" aria-label="Ver site">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+                <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+              </svg>
+              <span className="hidden sm:inline">Ver site</span>
+            </a>
+            <button onClick={() => setShowSettings(true)} className="btn btn-ghost min-h-10 px-3 py-2 text-xs" aria-label="Configurações da loja">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
                 <circle cx="12" cy="12" r="3" />
                 <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z" />
@@ -117,13 +122,13 @@ function Panel({ initialSettings }: { initialSettings: StoreSettings }) {
               <span className="hidden sm:inline">Configurações</span>
             </button>
             <form action="/admin/logout" method="post">
-              <button className="btn btn-ghost px-3 py-2 text-xs">Sair</button>
+              <button className="btn btn-ghost min-h-10 px-3 py-2 text-xs">Sair</button>
             </form>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 pb-24 pt-8 sm:px-8 sm:pt-10">
+      <main className="mx-auto max-w-5xl px-4 pt-6 pb-[max(6rem,env(safe-area-inset-bottom))] sm:px-8 sm:pt-10">
         <div className="mb-6 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="font-display text-4xl">Perfumes</h1>
@@ -131,7 +136,7 @@ function Panel({ initialSettings }: { initialSettings: StoreSettings }) {
               {counts.total} cadastrados · {counts.available} disponíveis · {counts.featured} em promoção
             </p>
           </div>
-          <button className="btn btn-primary" onClick={() => setEditing("new")}>+ Novo perfume</button>
+          <button className="btn btn-primary min-h-11 max-sm:w-full" onClick={() => setEditing("new")}>+ Novo perfume</button>
         </div>
 
         <input
@@ -183,8 +188,8 @@ function Panel({ initialSettings }: { initialSettings: StoreSettings }) {
                         <Switch label="Promoção" checked={p.is_featured} disabled={busyId === p.id} onChange={(v) => toggle(p, "is_featured", v)} />
                       </div>
                       <div className="flex gap-1.5">
-                        <button className="btn btn-ghost px-3 py-1.5 text-xs" onClick={() => setEditing(p)}>Editar</button>
-                        <button className="btn btn-danger px-3 py-1.5 text-xs" onClick={() => setDeleting(p)} disabled={busyId === p.id}>Excluir</button>
+                        <button className="btn btn-ghost min-h-10 px-4 py-1.5 text-xs sm:min-h-0 sm:px-3" onClick={() => setEditing(p)}>Editar</button>
+                        <button className="btn btn-danger min-h-10 px-4 py-1.5 text-xs sm:min-h-0 sm:px-3" onClick={() => setDeleting(p)} disabled={busyId === p.id}>Excluir</button>
                       </div>
                     </div>
                   </li>

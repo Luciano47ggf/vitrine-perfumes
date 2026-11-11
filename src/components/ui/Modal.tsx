@@ -30,16 +30,20 @@ export default function Modal({ title, onClose, children, footer, size = "md" }:
           size === "sm" ? "sm:max-w-sm" : "sm:max-w-lg"
         }`}
       >
-        <div className="flex items-center justify-between border-b border-line px-6 py-4">
+        <div className="flex items-center justify-between border-b border-line py-3 pl-5 pr-3 sm:px-6 sm:py-4">
           <h2 className="font-display text-xl">{title}</h2>
-          <button onClick={onClose} className="grid h-9 w-9 place-items-center rounded-full text-ink-2 transition hover:bg-mist" aria-label="Fechar">
+          <button onClick={onClose} className="grid h-11 w-11 place-items-center rounded-full text-ink-2 transition hover:bg-mist" aria-label="Fechar">
             <svg width="12" height="12" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="1.5" aria-hidden>
               <path d="M1 1l12 12M13 1L1 13" />
             </svg>
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto px-6 py-5">{children}</div>
-        {footer && <div className="flex justify-end gap-2 border-t border-line px-6 py-4">{footer}</div>}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5 sm:px-6">{children}</div>
+        {footer && (
+          <div className="flex justify-end gap-2 border-t border-line px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-6 [&>*]:max-sm:flex-1">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -57,11 +61,11 @@ export function Switch({ checked, onChange, label, disabled }: { checked: boolea
       aria-checked={checked}
       disabled={disabled}
       onClick={() => onChange(!checked)}
-      className="group inline-flex items-center gap-2.5 text-[13px] text-ink-2 disabled:opacity-50"
+      className="group inline-flex min-h-11 items-center gap-2.5 text-[13px] text-ink-2 disabled:opacity-50"
     >
-      <span className={`relative h-[22px] w-[38px] rounded-full transition-colors duration-300 ${checked ? "bg-ink" : "bg-stone"}`}>
+      <span className={`relative block h-[24px] w-[42px] shrink-0 rounded-full transition-colors duration-300 ${checked ? "bg-ink" : "bg-stone"}`}>
         <span
-          className={`absolute top-[3px] h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-300 ease-[var(--ease-lux)] ${checked ? "translate-x-[19px]" : "translate-x-[3px]"}`}
+          className={`absolute left-0 top-[3px] block h-[18px] w-[18px] rounded-full bg-white shadow-sm transition-transform duration-300 ease-[var(--ease-lux)] ${checked ? "translate-x-[21px]" : "translate-x-[3px]"}`}
         />
       </span>
       {label}

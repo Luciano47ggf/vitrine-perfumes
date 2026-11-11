@@ -33,7 +33,7 @@ export default function LoginPage() {
         <p className="label-caps text-bronze">Área restrita</p>
         <h1 className="mb-7 mt-2 font-display text-3xl">Painel da loja</h1>
         <label className="label" htmlFor="email">E-mail</label>
-        <input id="email" type="email" autoComplete="email" required className="field mb-4" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input id="email" type="email" inputMode="email" autoCapitalize="none" autoCorrect="off" autoComplete="email" required className="field mb-4" value={email} onChange={(e) => setEmail(e.target.value)} />
         <label className="label" htmlFor="password">Senha</label>
         <input id="password" type="password" autoComplete="current-password" required className="field mb-6" value={password} onChange={(e) => setPassword(e.target.value)} />
         {error && <p className="mb-4 rounded-md border border-danger/20 px-3 py-2 text-sm text-danger">{error}</p>}

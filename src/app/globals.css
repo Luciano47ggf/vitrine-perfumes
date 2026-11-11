@@ -57,6 +57,13 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent; /* sem "flash" cinza ao tocar no celular */
+  overscroll-behavior-x: none; /* deslizar para o lado não aciona "voltar página" */
+}
+
+button,
+a {
+  touch-action: manipulation; /* toque responde na hora, sem atraso de duplo toque */
 }
 
 body {
@@ -104,14 +111,14 @@ body {
 /* Campos e botões do painel (camada "components": classes como pl-10 ou px-3 têm prioridade) */
 @layer components {
   .field {
-    @apply w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink outline-none transition
+    @apply w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-base text-ink outline-none transition sm:text-[15px]
       placeholder:text-ink-3 focus:border-ink;
   }
   .label {
     @apply mb-1.5 block text-[12px] font-medium tracking-wide text-ink-2;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium tracking-wide transition
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 py-2.5 text-sm font-medium tracking-wide transition
       duration-300 disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary {

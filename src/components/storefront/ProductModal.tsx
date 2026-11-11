@@ -23,6 +23,42 @@ export default function ProductModal({ product, whatsapp, shareUrl, onClose }: P
     setTimeout(onClose, 260);
   }, [onClose]);
 
+  // Celular: arrastar a janela para baixo (estando no topo) fecha o perfume
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ y: number; dy: number } | null>(null);
+  function onTouchStart(e: React.TouchEvent) {
+    const el = sheetRef.current;
+    if (!el || window.innerWidth >= 640 || (scrollRef.current?.scrollTop ?? 0) > 0) return;
+    drag.current = { y: e.touches[0].clientY, dy: 0 };
+  }
+  function onTouchMove(e: React.TouchEvent) {
+    const el = sheetRef.current;
+    if (!drag.current || !el) return;
+    const dy = e.touches[0].clientY - drag.current.y;
+    if (dy <= 0 || (scrollRef.current?.scrollTop ?? 0) > 0) {
+      drag.current.dy = 0;
+      el.style.transform = "";
+      return;
+    }
+    drag.current.dy = dy;
+    el.style.transition = "none";
+    el.style.transform = `translateY(${dy * 0.7}px)`;
+  }
+  function onTouchEnd() {
+    const el = sheetRef.current;
+    const dy = drag.current?.dy ?? 0;
+    drag.current = null;
+    if (!el) return;
+    el.style.transition = "";
+    if (dy > 110) {
+      el.style.transform = "translateY(100%)";
+      close();
+    } else {
+      el.style.transform = "";
+    }
+  }
+
   async function share() {
     const url = new URL(shareUrl, window.location.href).toString();
     const title = [product.brand, product.name].filter(Boolean).join(" ");
@@ -63,12 +99,18 @@ export default function ProductModal({ product, whatsapp, shareUrl, onClose }: P
       <div className="absolute inset-0 animate-fade bg-ink/35 backdrop-blur-[3px]" onClick={close} />
 
       <div
-        className={`relative flex max-h-[94dvh] w-full max-w-4xl animate-sheet flex-col overflow-hidden rounded-t-2xl bg-porcelain shadow-[0_30px_80px_-20px_rgb(22_25_29/0.35)] transition-transform duration-300 sm:flex-row sm:rounded-xl ${closing ? "translate-y-6" : ""}`}
+        ref={sheetRef}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        className={`relative flex max-h-[92dvh] w-full max-w-4xl animate-sheet flex-col overflow-hidden rounded-t-2xl bg-porcelain shadow-[0_30px_80px_-20px_rgb(22_25_29/0.35)] transition-transform duration-300 sm:rounded-xl ${closing ? "translate-y-6" : ""}`}
       >
+        {/* alça: indica que dá para arrastar para baixo */}
+        <span className="pointer-events-none absolute left-1/2 top-2 z-10 h-1 w-10 -translate-x-1/2 rounded-full bg-ink/20 sm:hidden" aria-hidden />
         <button
           ref={closeBtn}
           onClick={close}
-          className="absolute right-3 top-3 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-ink shadow-sm transition hover:rotate-90 hover:bg-white"
+          className="absolute right-3 top-3 z-20 grid h-11 w-11 place-items-center rounded-full bg-white/90 text-ink shadow-sm transition hover:rotate-90 hover:bg-white"
           aria-label="Fechar"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="1.4" aria-hidden>
@@ -76,13 +118,15 @@ export default function ProductModal({ product, whatsapp, shareUrl, onClose }: P
           </svg>
         </button>
 
-        <div className="relative aspect-[4/3.6] w-full shrink-0 overflow-hidden bg-mist sm:aspect-auto sm:min-h-[560px] sm:w-[52%]">
+        {/* conteúdo que rola (a moldura com o X fica parada) */}
+        <div ref={scrollRef} className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain sm:flex-row sm:overflow-hidden">
+        <div className="relative aspect-square w-full shrink-0 overflow-hidden bg-mist max-sm:max-h-[48dvh] sm:aspect-auto sm:min-h-[560px] sm:w-[52%]">
           <div className="absolute inset-0 animate-settle bg-mist">
             <ProductImage product={product} sizes="(min-width: 640px) 460px, 100vw" priority pad="lg" />
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col overflow-y-auto px-6 pb-6 pt-7 sm:px-10 sm:pb-10 sm:pt-12">
+        <div className="flex min-w-0 flex-1 flex-col px-6 pt-7 sm:overflow-y-auto sm:overscroll-contain sm:px-10 sm:pb-10 sm:pt-12">
           <p className="label-caps animate-rise text-bronze" style={{ animationDelay: "80ms" }}>{product.brand}</p>
           <h2 className="mt-2 animate-rise text-balance font-display text-[34px] leading-[1.08] sm:text-[42px]" style={{ animationDelay: "140ms" }}>
             {product.name}
@@ -111,7 +155,11 @@ export default function ProductModal({ product, whatsapp, shareUrl, onClose }: P
             </p>
           )}
 
-          <div className="mt-auto animate-rise pt-9" style={{ animationDelay: "360ms" }}>
+          {/* no celular o botão fica fixo no rodapé da janela, sempre à mão */}
+          <div
+            className="sticky bottom-0 z-10 -mx-6 mt-auto animate-rise border-t border-line/70 bg-porcelain/95 px-6 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-md sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:pt-9 sm:pb-0 sm:backdrop-blur-none"
+            style={{ animationDelay: "360ms" }}
+          >
             {!whatsapp ? (
               <button
                 disabled
@@ -125,14 +173,14 @@ export default function ProductModal({ product, whatsapp, shareUrl, onClose }: P
               <WhatsAppButton href={waLink(whatsapp, productOrderMessage(product))} label="Encomendar pelo WhatsApp" outline />
             )}
             {whatsapp && (
-              <p className="mt-3 text-center text-xs text-ink-3">
+              <p className="mt-2.5 text-center text-xs text-ink-3 sm:mt-3">
                 {canOrder ? "A conversa abre com o nome do perfume já escrito." : "Sem estoque agora, mas podemos encomendar para você."}
               </p>
             )}
             <button
               type="button"
               onClick={share}
-              className="mx-auto mt-4 flex items-center gap-2 text-[12px] tracking-wide text-ink-2 underline-offset-4 transition hover:text-ink hover:underline"
+              className="mx-auto mt-2 flex min-h-10 items-center gap-2 text-[12px] tracking-wide text-ink-2 sm:mt-4 underline-offset-4 transition hover:text-ink hover:underline"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
                 <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v14" />
@@ -140,6 +188,7 @@ export default function ProductModal({ product, whatsapp, shareUrl, onClose }: P
               {shared ? "Link copiado!" : "Compartilhar este perfume"}
             </button>
           </div>
+        </div>
         </div>
       </div>
     </div>

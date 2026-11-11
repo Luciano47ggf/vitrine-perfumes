@@ -35,7 +35,7 @@ export default function AccordEditor({ value, onChange }: Props) {
             if (!info) return null;
             return (
               <li key={a.key} className="flex items-center gap-2.5">
-                <div className="relative h-[26px] flex-1">
+                <div className="relative h-[30px] flex-1 sm:h-[26px]">
                   <span
                     className="pointer-events-none absolute inset-y-0 left-0 flex items-center rounded-r-full pl-3 text-[12px] font-medium tracking-[0.04em] transition-[width] duration-150"
                     style={{ width: `${30 + a.value * 0.7}%`, backgroundColor: info.color, color: textOn(info.color) }}
@@ -56,7 +56,7 @@ export default function AccordEditor({ value, onChange }: Props) {
                 <button
                   type="button"
                   onClick={() => remove(a.key)}
-                  className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-ink-3 transition hover:bg-mist hover:text-ink"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink-3 transition hover:bg-mist hover:text-ink"
                   aria-label={`Remover ${info.label}`}
                 >
                   <svg width="10" height="10" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="1.6" aria-hidden>
@@ -73,14 +73,14 @@ export default function AccordEditor({ value, onChange }: Props) {
         {value.length ? "Arraste sobre a barra para ajustar a intensidade. A mais forte fica em cima." : "Toque nos acordes do perfume, do mais marcante ao mais suave."}
       </p>
 
-      <div className="mt-3 flex flex-wrap gap-1.5">
+      <div className="mt-3 flex flex-wrap gap-2 sm:gap-1.5">
         {ACCORDS.filter((a) => !chosen.has(a.key)).map((a) => (
           <button
             key={a.key}
             type="button"
             disabled={full}
             onClick={() => add(a.key)}
-            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white py-1 pl-1.5 pr-2.5 text-[12px] text-ink-2 transition hover:border-ink hover:text-ink disabled:opacity-40"
+            className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-line bg-white py-1 pl-2 pr-3 text-[13px] text-ink-2 sm:min-h-0 sm:pl-1.5 sm:pr-2.5 sm:text-[12px] transition hover:border-ink hover:text-ink disabled:opacity-40"
           >
             <span className="h-3 w-3 rounded-full" style={{ backgroundColor: a.color }} />
             {a.label}

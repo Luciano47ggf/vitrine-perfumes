@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Product, StoreSettings } from "@/lib/types";
 import { formatBRL } from "@/lib/money";
 import { instagramUrl, searchOrderMessage, waLink } from "@/lib/whatsapp";
@@ -80,7 +80,7 @@ export default function Storefront({ products, settings, loadError }: Props) {
           scrolled ? "border-b border-line/80 bg-porcelain/85 backdrop-blur-md" : "border-b border-transparent bg-porcelain"
         }`}
       >
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-8 sm:py-5">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-8 sm:py-5">
           <a href="#" className="flex items-center gap-3.5" aria-label={storeName}>
             <span className="grid h-10 w-10 place-items-center rounded-full border border-ink/80 font-display text-lg">
               {storeName.charAt(0)}
@@ -96,7 +96,7 @@ export default function Storefront({ products, settings, loadError }: Props) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram da loja"
-              className="flex items-center gap-2.5 rounded-full border border-line px-4 py-2.5 text-[13px] tracking-wide text-ink transition duration-300 hover:border-ink"
+              className="flex min-h-11 min-w-11 items-center justify-center gap-2.5 rounded-full border border-line px-3 text-[13px] tracking-wide text-ink transition duration-300 hover:border-ink sm:px-4"
             >
               <InstagramIcon />
               <span className="hidden sm:inline">Instagram</span>
@@ -139,7 +139,7 @@ export default function Storefront({ products, settings, loadError }: Props) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Pesquisar perfume ou marca"
-                className="w-full border-b border-line bg-transparent py-3 pl-7 pr-2 text-[15px] outline-none transition placeholder:text-ink-3 focus:border-ink"
+                className="w-full border-b border-line bg-transparent py-3 pl-7 pr-2 text-base outline-none sm:text-[15px] transition placeholder:text-ink-3 focus:border-ink"
               />
             </label>
           </div>
@@ -197,7 +197,7 @@ export default function Storefront({ products, settings, loadError }: Props) {
       </main>
 
       <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 py-10 text-center sm:px-8">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 pt-10 pb-[max(2.5rem,env(safe-area-inset-bottom))] text-center sm:px-8">
           <p className="font-display text-xl tracking-[0.04em]">{storeName}</p>
           <p className="text-xs text-ink-3">© {new Date().getFullYear()} · Atendimento pelo WhatsApp</p>
         </div>
@@ -237,15 +237,41 @@ function Featured({ items, onOpen }: { items: Product[]; onOpen: (p: Product) =>
   }, []);
 
   // A barra de progresso comanda a troca: pausar a barra pausa o carrossel no ponto exato
-  const next = () => setIndex((i) => (i + 1) % items.length);
+  const go = (i: number) => setIndex(((i % items.length) + items.length) % items.length);
+  const next = () => go(index + 1);
+
+  // Fotos das promoções: carrega a atual e a próxima; as outras só quando forem aparecer
+  const [seen, setSeen] = useState<Set<number>>(() => new Set([0, 1]));
+  useEffect(() => {
+    setSeen((prev) => (prev.has(index) && prev.has((index + 1) % items.length) ? prev : new Set([...prev, index, (index + 1) % items.length])));
+  }, [index, items.length]);
+
+  // Celular: deslizar para o lado troca a promoção
+  const touch = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    setPaused(true);
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const t = touch.current;
+    touch.current = null;
+    setPaused(false);
+    if (!t || !many) return;
+    const dx = e.changedTouches[0].clientX - t.x;
+    const dy = e.changedTouches[0].clientY - t.y;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) go(index + (dx < 0 ? 1 : -1));
+  };
 
   return (
     <section
-      className="pt-6 sm:pt-10"
+      className="touch-pan-y pt-6 sm:pt-10"
       aria-roledescription="carrossel"
       aria-label="Promoções"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      onTouchCancel={() => setPaused(false)}
     >
       <div className="grid overflow-hidden rounded-md bg-white md:grid-cols-[1fr_1.15fr]">
         {/* Texto */}
@@ -279,7 +305,7 @@ function Featured({ items, onOpen }: { items: Product[]; onOpen: (p: Product) =>
                   role="tab"
                   aria-selected={i === index}
                   aria-label={p.name}
-                  onClick={() => setIndex(i)}
+                  onClick={() => go(i)}
                   className="group relative h-14 w-11 shrink-0 overflow-hidden rounded-[3px] bg-mist"
                 >
                   <ProductImage product={p} sizes="44px" pad="sm" className={`transition duration-500 ${i === index ? "" : "opacity-55 grayscale group-hover:opacity-90"}`} />
@@ -312,7 +338,7 @@ function Featured({ items, onOpen }: { items: Product[]; onOpen: (p: Product) =>
               }`}
               aria-hidden={i !== index}
             >
-              <ProductImage product={p} sizes="(min-width: 768px) 600px, 100vw" priority={i === 0} pad="lg" />
+              {seen.has(i) && <ProductImage product={p} sizes="(min-width: 768px) 600px, 100vw" priority={i === 0} pad="lg" />}
             </div>
           ))}
         </button>
