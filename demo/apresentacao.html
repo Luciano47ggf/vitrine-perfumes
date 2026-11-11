@@ -1,0 +1,905 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Rafael · Perfumaria masculina. Fragrâncias de alto padrão, pedidos pelo WhatsApp.">
+<meta name="theme-color" content="#f6f6f3">
+<style>[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Rafael Perfumaria</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: perfumaria masculina clara — destaque em carrossel (texto | frasco), catálogo em grade, painel de uma tela.
+   Tema único claro, escolhido de propósito (pedido do cliente: cores claras). */
+:root{
+  color-scheme:light;
+  --porcelain:#f6f6f3; --white:#ffffff; --mist:#ecebe6; --stone:#e2e1db;
+  --ink:#16191d; --ink-2:#5b6066; --ink-3:#8b9096; --line:#dddcd5;
+  --bronze:#8a6b45; --ok:#2f6b4f; --danger:#a33a32; --wa:#25d366;
+  --f-display:"Marcellus","Times New Roman",serif;
+  --f-body:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--porcelain);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--ink)}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+::selection{background:var(--ink);color:var(--porcelain)}
+:focus-visible{outline:2px solid var(--bronze);outline-offset:3px}
+.wrap{max-width:1152px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media(min-width:640px){.wrap{padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}}
+.caps{font-size:11px;font-weight:500;letter-spacing:.26em;text-transform:uppercase}
+.disp{font-family:var(--f-display);font-weight:400}
+.num{font-variant-numeric:tabular-nums}
+h1,h2,h3{text-wrap:balance;margin:0}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes sheet{from{opacity:0;transform:translateY(32px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes settle{from{transform:scale(1.08)}to{transform:scale(1)}}
+@keyframes prog{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.rise{animation:rise .7s var(--ease) both}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* barra da prévia */
+.pv{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--ink);color:var(--porcelain)}
+.pv .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-block:7px}
+.pv small{font-size:12px;opacity:.7;letter-spacing:.03em}
+.seg{display:inline-flex;gap:2px;background:rgba(255,255,255,.1);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;color:inherit;padding:6px 15px;border-radius:999px;font-size:12.5px;font-weight:500;letter-spacing:.04em;transition:background .3s,color .3s}
+.seg button[aria-pressed="true"]{background:var(--porcelain);color:var(--ink)}
+
+/* ---------- VITRINE ---------- */
+.s-head{position:sticky;top:calc(env(safe-area-inset-top,0px) + 41px);z-index:30;background:var(--porcelain);border-bottom:1px solid transparent;transition:background .5s,border-color .5s}
+.s-head.scrolled{background:rgba(246,246,243,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--line)}
+.s-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:18px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit}
+.mono{width:40px;height:40px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;font-family:var(--f-display);font-size:18px}
+.brand b{display:block;font-family:var(--f-display);font-weight:400;font-size:22px;letter-spacing:.04em;line-height:1}
+.brand small{display:block;margin-top:6px;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-3)}
+.ig{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:13px;letter-spacing:.03em;color:var(--ink);text-decoration:none;transition:border-color .3s}
+.ig:hover{border-color:var(--ink)}
+
+.hero{margin-top:24px;display:grid;grid-template-columns:1fr 1.15fr;background:var(--white);border-radius:6px;overflow:hidden}
+.h-text{display:flex;flex-direction:column;justify-content:space-between;gap:32px;padding:56px}
+.h-text .bronze{color:var(--bronze)}
+.h-text .count{margin-left:12px;color:var(--ink-3)}
+.h-text .br{margin-top:24px;color:var(--ink-2)}
+.h-text h1{font-family:var(--f-display);font-weight:400;font-size:clamp(40px,5.2vw,58px);line-height:1.02;margin-top:8px}
+.h-text p.d{margin:20px 0 0;max-width:42ch;color:var(--ink-2);font-weight:300;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.h-cta{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:28px}
+.btn-dark{display:inline-flex;align-items:center;gap:12px;border:0;background:var(--ink);color:var(--porcelain);border-radius:5px;padding:14px 24px;font-size:12.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;transition:background .3s}
+.btn-dark:hover{background:#2c3036}
+.btn-dark svg{transition:transform .35s var(--ease)}
+.btn-dark:hover svg{transform:translateX(4px)}
+.h-price{font-family:var(--f-display);font-size:26px}
+.thumbs{display:flex;gap:10px}
+.thumb-b{position:relative;width:44px;height:56px;border:0;padding:0;border-radius:3px;overflow:hidden;background:var(--mist)}
+.thumb-b .art{transition:opacity .5s,filter .5s}
+.thumb-b[aria-selected="false"] .art{opacity:.5;filter:grayscale(1)}
+.thumb-b:hover .art{opacity:.9}
+.thumb-b .bar{position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(22,25,29,.1)}
+.thumb-b .bar i{display:block;height:100%;background:var(--ink);transform-origin:left;animation:prog linear both}
+.h-img{position:relative;border:0;padding:0;background:var(--mist);min-height:600px;overflow:hidden}
+.slide{position:absolute;inset:0;opacity:0;transform:scale(1.06);transition:opacity 1.4s var(--ease),transform 1.4s var(--ease)}
+.slide.on{opacity:1;transform:scale(1)}
+.art{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+.cat-h{scroll-margin-top:130px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin:96px 0 40px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.cat-h .bronze{color:var(--bronze)}
+.cat-h h2{font-family:var(--f-display);font-weight:400;font-size:clamp(36px,5vw,48px);line-height:1.05;margin-top:8px}
+.search{position:relative;width:min(100%,320px)}
+.search svg{position:absolute;left:0;top:50%;transform:translateY(-50%);color:var(--ink-3)}
+.search input{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;padding:12px 8px 12px 28px;outline:none;transition:border-color .3s}
+.search input:focus{border-color:var(--ink)}
+.search input::placeholder{color:var(--ink-3)}
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:48px 24px}
+.card{display:block;width:100%;border:0;background:none;padding:0;text-align:left}
+.ph{position:relative;aspect-ratio:4/5;max-width:100%;border-radius:3px;overflow:hidden;background:var(--mist)}
+.ph .zoom{position:absolute;inset:0;transition:transform 1.2s var(--ease)}
+.card:hover .ph .zoom{transform:scale(1.05)}
+.card.off .zoom{filter:grayscale(1);opacity:.6}
+.ph::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);transform:translateX(-120%);transition:transform 1.1s var(--ease);pointer-events:none}
+.card:hover .ph::after{transform:translateX(120%)}
+.ph .promo{position:absolute;left:12px;top:12px;background:rgba(246,246,243,.92);border-radius:999px;padding:4px 10px;font-size:9px}
+.ph .more{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;align-items:center;background:rgba(246,246,243,.94);border-radius:3px;padding:8px 12px;font-size:12px;letter-spacing:.04em;opacity:0;transform:translateY(8px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.card:hover .more{opacity:1;transform:none}
+.card .b{display:block;margin-top:16px;font-size:10px;color:var(--ink-3)}
+.card .n{display:block;margin-top:4px;font-family:var(--f-display);font-size:20px;line-height:1.3}
+.av{display:inline-flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;font-weight:500;letter-spacing:.03em;color:var(--ok)}
+.av::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.av.no{color:var(--ink-3)}
+.empty{text-align:center;color:var(--ink-2);font-weight:300;padding:80px 0}
+.s-foot{margin-top:112px;border-top:1px solid var(--line);text-align:center;padding-block:40px}
+.s-foot p{margin:0}
+.s-foot small{display:block;margin-top:8px;color:var(--ink-3);font-size:12px}
+
+/* janela do perfume */
+.ov{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:32px;transition:opacity .28s}
+.ov.closing{opacity:0}
+.ov .bg{position:absolute;inset:0;background:rgba(22,25,29,.35);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);animation:fade .5s var(--ease) both}
+.pm{position:relative;display:flex;width:100%;max-width:900px;max-height:90vh;background:var(--porcelain);border-radius:10px;overflow:hidden;box-shadow:0 30px 80px -20px rgba(22,25,29,.35);animation:sheet .45s var(--ease) both;transition:transform .3s}
+.ov.closing .pm{transform:translateY(24px)}
+.pm .pi{position:relative;width:52%;flex-shrink:0;min-height:560px;background:var(--mist);overflow:hidden}
+.pm .pi .art{animation:settle 1.1s var(--ease) both}
+.pm .pt{flex:1;min-width:0;display:flex;flex-direction:column;overflow-y:auto;padding:48px 40px 40px}
+.pm .pt>*{animation:rise .7s var(--ease) both}
+.pm h3{font-family:var(--f-display);font-weight:400;font-size:42px;line-height:1.08;margin-top:8px}
+.meta{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:20px;color:var(--ink-2);font-size:14px}
+.price{margin:24px 0 0;font-family:var(--f-display);font-size:30px}
+.desc{margin:24px 0 0;padding-top:24px;border-top:1px solid var(--line);color:var(--ink-2);font-weight:300;max-width:52ch}
+.order{margin-top:auto;padding-top:36px}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:12px;background:var(--ink);color:var(--porcelain);border-radius:5px;padding:16px 24px;font-size:13px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:background .3s}
+.wa-btn:hover{background:#2c3036}
+button.wa-btn{width:100%;border:0;font-family:inherit;cursor:pointer}
+button.ig{background:none;font-family:inherit;cursor:pointer}
+.wa-btn .dot{width:28px;height:28px;border-radius:50%;background:var(--wa);color:#fff;display:grid;place-items:center;transition:transform .3s var(--ease)}
+.wa-btn:hover .dot{transform:scale(1.1)}
+.wa-btn.outline{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.wa-btn.outline:hover{background:var(--ink);color:var(--porcelain)}
+.nf{max-width:440px;margin:0 auto;padding:64px 0;text-align:center}
+.nf p{margin:0;font-size:24px;line-height:1.3}
+.nf>span{display:block;margin:12px 0 28px;color:var(--ink-2);font-weight:300}
+.nf .wa-btn{max-width:360px;margin:0 auto}
+.nf .clear{margin-top:20px;border:0;background:none;color:var(--ink-2);font-size:14px;text-underline-offset:4px}
+.nf .clear:hover{color:var(--ink);text-decoration:underline}
+.wa-off{display:flex;justify-content:center;border:1px solid var(--line);border-radius:5px;padding:16px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);cursor:not-allowed}
+.order small{display:block;text-align:center;margin-top:12px;color:var(--ink-3);font-size:12px}
+.xbtn{position:absolute;right:12px;top:12px;z-index:3;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.92);box-shadow:0 1px 4px rgba(0,0,0,.08);display:grid;place-items:center;transition:transform .35s var(--ease)}
+.xbtn:hover{transform:rotate(90deg)}
+
+/* ---------- PAINEL ---------- */
+.a-head{background:var(--white);border-bottom:1px solid var(--line)}
+.a-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:16px}
+.a-head b{display:block;font-family:var(--f-display);font-weight:400;font-size:20px;letter-spacing:.03em;line-height:1.1}
+.a-head small{display:block;margin-top:4px;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-3)}
+.acts{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:5px;padding:10px 16px;font-size:13.5px;font-weight:500;letter-spacing:.03em;border:1px solid transparent;transition:all .3s;white-space:nowrap;text-decoration:none}
+.btn.pri{background:var(--ink);color:var(--porcelain)}
+.btn.pri:hover{background:#2c3036}
+.btn.gh{background:var(--white);border-color:var(--line);color:var(--ink)}
+.btn.gh:hover{border-color:var(--ink)}
+.btn.dg{background:var(--white);border-color:rgba(163,58,50,.3);color:var(--danger)}
+.btn.dg:hover{background:var(--danger);color:#fff}
+.btn.dgf{background:var(--danger);color:#fff}
+.btn.sm{padding:7px 12px;font-size:12px}
+.a-main{padding-block:40px 96px}
+.a-top{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+.a-top h1{font-family:var(--f-display);font-weight:400;font-size:40px;line-height:1}
+.a-top p{margin:8px 0 0;font-size:14px;color:var(--ink-2)}
+.field{width:100%;border:1px solid var(--line);background:var(--white);border-radius:5px;padding:10px 14px;outline:none;transition:border-color .3s}
+.field:focus{border-color:var(--ink)}
+.field::placeholder{color:var(--ink-3)}
+.lab{display:block;margin-bottom:6px;font-size:12px;font-weight:500;letter-spacing:.03em;color:var(--ink-2)}
+.plist{list-style:none;margin:16px 0 0;padding:0;background:var(--white);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.plist li{display:flex;align-items:center;gap:16px;padding:16px 20px;border-top:1px solid var(--line);animation:rise .7s var(--ease) both}
+.plist li:first-child{border-top:0}
+.pthumb{position:relative;width:52px;height:64px;flex-shrink:0;border-radius:3px;overflow:hidden;background:var(--mist)}
+.pinfo{flex:1;min-width:0}
+.pinfo .b{font-size:9.5px;color:var(--ink-3)}
+.pinfo .n{display:block;font-family:var(--f-display);font-size:18px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pinfo .m{font-size:12px;color:var(--ink-2)}
+.pctl{display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:flex-end}
+.sw{display:inline-flex;align-items:center;gap:10px;border:0;background:none;padding:0;font-size:13px;color:var(--ink-2)}
+.sw .tr{position:relative;width:38px;height:22px;border-radius:999px;background:var(--stone);transition:background .3s}
+.sw .tr::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.15);transition:transform .3s var(--ease)}
+.sw[aria-checked="true"] .tr{background:var(--ink)}
+.sw[aria-checked="true"] .tr::after{transform:translateX(16px)}
+.btns{display:flex;gap:6px}
+
+/* janelas do painel */
+.am{position:relative;width:100%;max-width:520px;max-height:92vh;display:flex;flex-direction:column;background:var(--white);border-radius:10px;box-shadow:0 30px 80px -20px rgba(22,25,29,.35);animation:sheet .45s var(--ease) both}
+.am.small{max-width:380px}
+.am header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--line)}
+.am header h3{font-family:var(--f-display);font-weight:400;font-size:20px}
+.am .xs{width:36px;height:36px;border:0;border-radius:50%;background:none;display:grid;place-items:center;color:var(--ink-2)}
+.am .xs:hover{background:var(--mist)}
+.am .bd{padding:20px 24px;overflow-y:auto;display:flex;flex-direction:column;gap:16px}
+.am footer{display:flex;justify-content:flex-end;gap:8px;padding:16px 24px;border-top:1px solid var(--line)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.drop{display:flex;align-items:center;gap:16px;width:100%;border:1px dashed var(--line);border-radius:8px;padding:12px;background:none;text-align:left;transition:border-color .3s,background .3s}
+.drop:hover,.drop.drag{border-color:var(--ink)}
+.drop.drag{background:var(--mist)}
+.drop .dp{position:relative;width:76px;height:96px;flex-shrink:0;border-radius:3px;overflow:hidden;background:var(--mist)}
+.drop .dp img{width:100%;height:100%;object-fit:cover;animation:fade .5s both}
+.drop b{display:block;font-weight:500;font-size:14px}
+.drop span{display:block;margin-top:2px;font-size:12px;color:var(--ink-3)}
+.prefix{position:relative}
+.prefix span{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--ink-3)}
+.prefix .field{padding-left:40px}
+.flags{display:flex;gap:12px 32px;flex-wrap:wrap;background:rgba(236,235,230,.6);border-radius:8px;padding:14px 16px}
+.err{margin:0;border:1px solid rgba(163,58,50,.2);border-radius:5px;padding:9px 12px;color:var(--danger);font-size:14px}
+.hint{margin:6px 0 0;font-size:12px;color:var(--ink-3)}
+/* acordes principais */
+@keyframes accord{from{width:0}to{width:var(--w)}}
+.acc{margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}
+.acc .t{margin:0;font-size:10px;color:var(--ink-3)}
+.acc ul{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:5px}
+.acc li{height:26px}
+.bar-a{display:flex;align-items:center;height:100%;width:var(--w);border-radius:0 999px 999px 0;padding-left:12px;overflow:hidden;white-space:nowrap;font-size:12.5px;font-weight:500;letter-spacing:.04em;animation:accord .9s var(--ease) both}
+.bar-a span{animation:fade .5s var(--ease) both}
+.ae-head{display:flex;justify-content:space-between;align-items:baseline}
+.ae-list{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.ae-list li{display:flex;align-items:center;gap:10px}
+.ae-track{position:relative;flex:1;height:26px}
+.ae-track .fill{position:absolute;inset:0 auto 0 0;display:flex;align-items:center;padding-left:12px;border-radius:0 999px 999px 0;font-size:12px;font-weight:500;letter-spacing:.04em;white-space:nowrap;pointer-events:none;transition:width .15s}
+.ae-track input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
+.ae-x{width:28px;height:28px;flex-shrink:0;border:0;border-radius:50%;background:none;color:var(--ink-3);display:grid;place-items:center}
+.ae-x:hover{background:var(--mist);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:4px 10px 4px 6px;font-size:12px;color:var(--ink-2);transition:border-color .3s,color .3s}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+.chip:disabled{opacity:.4;cursor:not-allowed}
+.chip i{width:12px;height:12px;border-radius:50%}
+/* ---------- simulação WhatsApp / Instagram (somente demonstração) ---------- */
+.demo{position:fixed;inset:0;z-index:85;display:flex;align-items:center;justify-content:center;gap:40px;padding:24px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.demo .bg{position:absolute;inset:0;background:rgba(22,25,29,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:fade .4s var(--ease) both}
+.demo-side{position:relative;max-width:300px;color:#f6f6f3;animation:rise .7s var(--ease) both}
+.demo-side .caps{color:#cdb48f;margin:0}
+.demo-side h3{font-family:var(--f-display);font-weight:400;font-size:34px;line-height:1.1;margin-top:10px}
+.demo-side p{margin:14px 0 0;color:rgba(246,246,243,.78);font-weight:300}
+.demo-side .acts2{display:flex;gap:8px;margin-top:24px;flex-wrap:wrap}
+.demo-side button{border:1px solid rgba(246,246,243,.4);background:none;color:#f6f6f3;border-radius:5px;padding:10px 16px;font-size:13px;letter-spacing:.04em;transition:background .3s,color .3s}
+.demo-side button:hover{background:#f6f6f3;color:var(--ink)}
+.phone{position:relative;width:340px;max-width:100%;height:min(680px,84vh);background:#0d0f12;border-radius:44px;padding:11px;box-shadow:0 40px 90px -20px rgba(0,0,0,.6);animation:sheet .6s var(--ease) both;flex-shrink:0}
+.screen{position:relative;height:100%;border-radius:34px;overflow:hidden;display:flex;flex-direction:column;background:#fff}
+.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:96px;height:26px;border-radius:20px;background:#0d0f12;z-index:5}
+.sbar{height:40px;flex-shrink:0;display:flex;align-items:flex-end;justify-content:space-between;padding:0 26px 4px;font-size:13px;font-weight:600}
+.ph-close{position:absolute;right:-8px;top:-8px;z-index:6;width:36px;height:36px;border-radius:50%;border:0;background:#f6f6f3;color:var(--ink);display:none;place-items:center;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+/* WhatsApp */
+.wa-scr{background:#efeae2}
+.wa-scr .sbar{background:#f7f7f7}
+.wa-top{display:flex;align-items:center;gap:10px;padding:8px 12px 10px;background:#f7f7f7;border-bottom:1px solid #e3e3e3}
+.wa-top .back{color:#0a7cff;font-size:22px;line-height:1}
+.wa-av{width:36px;height:36px;border-radius:50%;background:var(--ink);color:#f6f6f3;display:grid;place-items:center;font-family:var(--f-display);font-size:16px;flex-shrink:0}
+.wa-top b{display:block;font-size:15px;font-weight:600;line-height:1.2;color:#111}
+.wa-top small{display:block;font-size:12px;color:#667781;line-height:1.2;transition:color .3s}
+.wa-top small.typing{color:#1fa855}
+.wa-body{flex:1;overflow-y:auto;padding:14px 10px;display:flex;flex-direction:column;gap:6px;background-color:#efeae2;background-image:radial-gradient(rgba(0,0,0,.035) 1px,transparent 1px);background-size:14px 14px}
+.wa-day{align-self:center;background:#fff;color:#54656f;font-size:11.5px;padding:4px 10px;border-radius:7px;box-shadow:0 1px .5px rgba(0,0,0,.1);margin-bottom:6px}
+.wa-sec{align-self:center;max-width:88%;background:#fff6c4;color:#54656f;font-size:11.5px;text-align:center;padding:6px 10px;border-radius:7px;margin-bottom:6px}
+.bub{position:relative;max-width:82%;padding:7px 9px 6px;border-radius:8px;font-size:14px;line-height:1.38;color:#111b21;box-shadow:0 1px .5px rgba(0,0,0,.13);animation:bub .35s var(--ease) both;white-space:pre-wrap;word-wrap:break-word}
+@keyframes bub{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
+.bub.out{align-self:flex-end;background:#d9fdd3;border-top-right-radius:2px}
+.bub.in{align-self:flex-start;background:#fff;border-top-left-radius:2px}
+.bub .meta2{float:right;margin:6px 0 -3px 10px;font-size:11px;color:#667781;display:inline-flex;align-items:center;gap:3px}
+.ticks{color:#8696a0;transition:color .4s}
+.ticks.read{color:#53bdeb}
+.dots{display:inline-flex;gap:4px;padding:4px 2px}
+.dots i{width:7px;height:7px;border-radius:50%;background:#8696a0;animation:dot 1.1s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+.wa-input{display:flex;align-items:flex-end;gap:8px;padding:8px 10px 14px;background:#f7f7f7}
+.wa-field{flex:1;min-height:36px;max-height:110px;overflow:hidden;background:#fff;border-radius:18px;border:1px solid #e5e5e5;padding:8px 14px;font-size:14px;line-height:1.35;color:#111b21}
+.wa-field:empty::before{content:"Mensagem";color:#8696a0}
+.wa-send{width:36px;height:36px;border-radius:50%;background:#1fa855;color:#fff;display:grid;place-items:center;flex-shrink:0;transition:transform .2s}
+.wa-send.press{transform:scale(.85)}
+/* Instagram */
+.ig-scr .sbar{background:#fff}
+.ig-top{display:flex;align-items:center;justify-content:space-between;padding:6px 16px 10px;font-weight:600;font-size:17px;color:#000}
+.ig-body{flex:1;overflow-y:auto}
+.ig-head{display:flex;align-items:center;gap:22px;padding:4px 16px 0}
+.ig-ring{width:84px;height:84px;border-radius:50%;padding:3px;background:conic-gradient(from 200deg,#c9a46a,#8a6b45,#16191d,#c9a46a);flex-shrink:0}
+.ig-ring span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:var(--ink);color:#f6f6f3;font-family:var(--f-display);font-size:34px;border:3px solid #fff}
+.ig-stats{flex:1;display:flex;justify-content:space-around;text-align:center;font-size:12.5px;color:#000}
+.ig-stats b{display:block;font-size:16px;font-weight:600}
+.ig-bio{padding:12px 16px 0;font-size:13.5px;line-height:1.4;color:#000}
+.ig-bio b{font-weight:600}
+.ig-bio .cat{color:#737373}
+.ig-bio a{color:#00376b;font-weight:500;text-decoration:none}
+.ig-btns{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:14px 16px}
+.ig-btns span{display:block;text-align:center;border-radius:8px;padding:7px 0;font-size:13.5px;font-weight:600;background:#efefef;color:#000}
+.ig-btns span.f{background:#0095f6;color:#fff;transition:background .3s}
+.ig-btns span.f.done{background:#efefef;color:#000}
+.ig-hl{display:flex;gap:16px;padding:0 16px 14px;overflow:hidden}
+.ig-hl div{text-align:center;font-size:11.5px;color:#000;flex-shrink:0}
+.ig-hl i{display:block;position:relative;width:60px;height:60px;border-radius:50%;border:1px solid #dbdbdb;padding:3px;margin-bottom:5px}
+.ig-hl i span{position:absolute;inset:3px;border-radius:50%;overflow:hidden}
+.ig-tabs{display:flex;border-top:1px solid #dbdbdb}
+.ig-tabs span{flex:1;text-align:center;padding:10px 0;font-size:12px;color:#737373}
+.ig-tabs span.on{color:#000;box-shadow:inset 0 -1px 0 #000}
+.ig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.ig-grid div{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--mist);animation:fade .6s var(--ease) both}
+@media (max-width:760px){
+  .demo{flex-direction:column;justify-content:flex-start;gap:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));overflow-y:auto}
+  .demo-side{max-width:340px;text-align:center}
+  .demo-side h3{font-size:24px;margin-top:6px}
+  .demo-side p{font-size:13.5px;margin-top:8px}
+  .demo-side .acts2{justify-content:center;margin-top:14px}
+  .phone{height:min(620px,72vh);border-radius:38px;padding:9px}
+  .screen{border-radius:30px}
+}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:90;max-width:calc(100% - 32px);background:var(--ink);color:var(--porcelain);border-radius:5px;padding:12px 16px;font-size:14px;letter-spacing:.02em;box-shadow:0 10px 30px rgba(0,0,0,.18);animation:sheet .45s var(--ease) both}
+
+@media (max-width:1000px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.h-text{padding:40px}}
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr}
+  .h-img{order:-1;min-height:0;aspect-ratio:4/4.2;max-width:100%}
+  .h-text{padding:24px 24px 28px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 16px}
+  .ph .more{display:none}
+  .cat-h{margin-top:64px}
+  .ig span{display:none}
+  .ov{align-items:flex-end;padding:0}
+  .pm{flex-direction:column;border-radius:16px 16px 0 0;max-height:94vh}
+  .pm .pi{width:100%;min-height:0;aspect-ratio:4/3.6;max-width:100%}
+  .pm .pt{padding:28px 24px 24px}
+  .pm h3{font-size:34px}
+  .am{max-width:none;border-radius:14px 14px 0 0;align-self:flex-end}
+  .plist li{flex-wrap:wrap}
+  .pctl{width:100%;justify-content:space-between}
+  .acts .tx{display:none}
+  .a-main{padding-block:32px 96px}
+}
+
+/* ---------- apresentação guiada ---------- */
+.tour-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(246,246,243,.35);background:none;color:inherit;border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:500;letter-spacing:.04em;transition:background .3s,color .3s}
+.tour-btn:hover{background:var(--porcelain);color:var(--ink)}
+.t-block{position:fixed;inset:0;z-index:93}
+.t-spot{position:fixed;z-index:94;border-radius:10px;pointer-events:none;box-shadow:0 0 0 2px rgba(205,180,143,.9),0 0 0 9999px rgba(16,18,21,.62);transition:left .6s var(--ease),top .6s var(--ease),width .6s var(--ease),height .6s var(--ease),opacity .4s}
+.t-spot::after{content:"";position:absolute;inset:-8px;border-radius:14px;border:1px solid rgba(205,180,143,.55);animation:pulse 2.2s var(--ease) infinite}
+@keyframes pulse{0%{opacity:.9;transform:scale(.98)}70%,100%{opacity:0;transform:scale(1.04)}}
+.t-card{position:fixed;left:50%;z-index:96;width:min(540px,calc(100% - 32px));transform:translateX(-50%);background:var(--white);color:var(--ink);border-radius:12px;box-shadow:0 24px 60px -12px rgba(0,0,0,.45);overflow:hidden;transition:top .5s var(--ease),bottom .5s var(--ease)}
+.t-card.bottom{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+.t-card.top{top:calc(56px + env(safe-area-inset-top,0px))}
+.t-prog{height:3px;background:var(--mist)}
+.t-prog i{display:block;height:100%;background:var(--bronze);transform-origin:left;animation:prog linear both}
+.t-in{padding:18px 22px 16px}
+.t-step{margin:0;font-size:10.5px;color:var(--bronze)}
+.t-in h4{margin:6px 0 0;font-family:var(--f-display);font-weight:400;font-size:26px;line-height:1.15;text-wrap:balance}
+.t-in p.tx{margin:8px 0 0;color:var(--ink-2);font-weight:300;line-height:1.5}
+.t-in .anim{animation:rise .55s var(--ease) both}
+.t-ctl{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
+.t-dots{display:flex;gap:5px;flex-wrap:wrap}
+.t-dots i{width:6px;height:6px;border-radius:50%;background:var(--stone);transition:background .3s,width .3s}
+.t-dots i.on{width:18px;border-radius:3px;background:var(--ink)}
+.t-dots i.done{background:var(--ink-3)}
+.t-btns{display:flex;gap:6px;flex-shrink:0}
+.t-ic{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--white);color:var(--ink);display:grid;place-items:center;transition:border-color .3s,background .3s,color .3s}
+.t-ic:hover{border-color:var(--ink)}
+.t-ic.pri{background:var(--ink);border-color:var(--ink);color:var(--porcelain)}
+.t-exit{border:0;background:none;color:var(--ink-3);font-size:12.5px;padding:0 4px;text-decoration:underline;text-underline-offset:3px}
+.t-exit:hover{color:var(--ink)}
+.tour-on .demo-side{display:none}
+.tour-on .demo{align-items:flex-start;padding-top:calc(52px + env(safe-area-inset-top,0px))}
+.tour-on .phone{height:min(600px,calc(100vh - 250px))}
+/* capa e encerramento */
+.t-cover{position:fixed;inset:0;z-index:98;overflow-y:auto;background:var(--porcelain);display:flex;align-items:center;justify-content:center;padding-block:40px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));animation:fade .5s var(--ease) both}
+.t-cover.out{opacity:0;transition:opacity .5s var(--ease)}
+.cv{max-width:620px;text-align:center}
+.cv>*{animation:rise .8s var(--ease) both}
+.cv .mono-xl{width:84px;height:84px;margin:0 auto;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;font-family:var(--f-display);font-size:38px}
+.cv .caps{margin:28px 0 0;color:var(--bronze)}
+.cv h2{font-family:var(--f-display);font-weight:400;font-size:clamp(52px,10vw,92px);line-height:1;margin-top:10px;letter-spacing:.02em}
+.cv .sub{margin:14px 0 0;font-size:11px;color:var(--ink-3)}
+.cv p.lead{margin:28px auto 0;max-width:46ch;color:var(--ink-2);font-weight:300;font-size:17px;line-height:1.6}
+.cv .bottles{display:flex;justify-content:center;gap:10px;margin-top:36px}
+.cv .bottles span{position:relative;width:64px;height:80px;border-radius:4px;overflow:hidden;background:var(--mist);animation:rise .8s var(--ease) both}
+.cv .row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:36px}
+.cv .go{display:inline-flex;align-items:center;gap:12px;border:0;background:var(--ink);color:var(--porcelain);border-radius:5px;padding:16px 28px;font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;transition:background .3s}
+.cv .go:hover{background:#2c3036}
+.cv .alt{border:1px solid var(--line);background:none;border-radius:5px;padding:15px 24px;font-size:13px;letter-spacing:.06em;color:var(--ink);transition:border-color .3s}
+.cv .alt:hover{border-color:var(--ink)}
+.cv .time{margin:16px 0 0;font-size:12px;color:var(--ink-3)}
+.cv ul.check{list-style:none;margin:28px auto 0;padding:0;max-width:420px;text-align:left;display:flex;flex-direction:column;gap:12px}
+.cv ul.check li{display:flex;gap:12px;align-items:flex-start;color:var(--ink-2);animation:rise .7s var(--ease) both}
+.cv ul.check svg{flex-shrink:0;margin-top:3px;color:var(--ok)}
+@media (max-width:760px){
+  .t-in{padding:14px 16px 12px}
+  .t-in h4{font-size:21px}
+  .t-in p.tx{font-size:14px}
+  .tour-on .phone{height:min(520px,calc(100vh - 290px))}
+  .pv small{display:none}
+  .cv .bottles span{width:52px;height:66px}
+}
+</style>
+</head>
+<body>
+
+<div class="pv"><div class="wrap">
+  <small>Demonstração com perfumes de exemplo · nada é salvo</small>
+  <div style="display:flex;gap:8px;align-items:center">
+  <button class="tour-btn" id="tour-start" type="button"><svg width="10" height="11" viewBox="0 0 10 11" fill="currentColor" aria-hidden="true"><path d="M0 0l10 5.5L0 11z"/></svg>Apresentação</button>
+  <div class="seg" role="group" aria-label="Escolher área">
+    <button id="go-store" aria-pressed="true">Vitrine</button>
+    <button id="go-admin" aria-pressed="false">Painel</button>
+  </div>
+  </div>
+</div></div>
+<div id="tour"></div>
+
+<div id="store"></div>
+<div id="admin" hidden></div>
+<div id="layer"></div>
+<div id="demo"></div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const brl=c=>c==null?"":new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(c/100);
+const parseBRL=s=>{const t=String(s).replace(/[^\d,.]/g,"");if(!t)return null;const n=t.includes(",")?t.replace(/\./g,"").replace(",","."):(/\.\d{3}$/.test(t)?t.replace(/\./g,""):t);const v=Number(n);return isFinite(v)&&v>=0?Math.round(v*100):null};
+const toInput=c=>c==null?"":(c/100).toFixed(2).replace(".",",");
+const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const settings={name:"Rafael",tagline:"Perfumaria masculina",wa:"5565999990000",ig:"rafaelperfumaria"};
+
+/* Frascos ilustrados (no site real entram as fotos enviadas) */
+const SHAPES=["rect","square","tall","round"];
+function art(p,id){
+  const [bg1,bg2,glass,cap]=p.c, u=(id||"a")+p.id, s=SHAPES[p.id%4];
+  let body,capEl,neck;
+  if(s==="rect"){body=`<rect x="125" y="170" width="150" height="190" rx="6"/>`;neck=`<rect x="186" y="150" width="28" height="22"/>`;capEl=`<rect x="168" y="92" width="64" height="60" rx="3"/>`}
+  else if(s==="square"){body=`<rect x="110" y="190" width="180" height="170" rx="14"/>`;neck=`<rect x="184" y="168" width="32" height="24"/>`;capEl=`<rect x="160" y="112" width="80" height="58" rx="4"/>`}
+  else if(s==="tall"){body=`<rect x="140" y="150" width="120" height="210" rx="4"/>`;neck=`<rect x="188" y="132" width="24" height="20"/>`;capEl=`<rect x="176" y="70" width="48" height="64" rx="24"/>`}
+  else{body=`<rect x="120" y="180" width="160" height="180" rx="80"/>`;neck=`<rect x="186" y="160" width="28" height="22"/>`;capEl=`<rect x="170" y="104" width="60" height="58" rx="6"/>`}
+  return `<svg class="art" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${esc(p.name)}">
+  <defs>
+   <linearGradient id="bg${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${bg1}"/><stop offset="1" stop-color="${bg2}"/></linearGradient>
+   <linearGradient id="gl${u}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${glass}" stop-opacity=".95"/><stop offset=".45" stop-color="${glass}" stop-opacity=".7"/><stop offset="1" stop-color="${glass}" stop-opacity="1"/></linearGradient>
+   <linearGradient id="hl${u}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#bg${u})"/>
+  <rect y="360" width="400" height="140" fill="#000" fill-opacity=".035"/>
+  <ellipse cx="200" cy="364" rx="110" ry="9" fill="#000" fill-opacity=".14"/>
+  <g fill="${cap}">${neck}${capEl}</g>
+  <g fill="url(#gl${u})">${body}</g>
+  <g fill="url(#hl${u})" opacity=".8"><rect x="${s==="square"?128:s==="round"?140:142}" y="${s==="tall"?160:190}" width="14" height="${s==="tall"?180:140}" rx="7"/></g>
+  <rect x="160" y="${s==="tall"?250:262}" width="80" height="34" fill="#fff" fill-opacity=".9"/>
+  <text x="200" y="${s==="tall"?272:284}" text-anchor="middle" font-family="Marcellus,'Times New Roman',serif" font-size="12" letter-spacing="2.5" fill="#16191d">${esc(p.brand.toUpperCase().slice(0,11))}</text>
+  </svg>`;
+}
+
+/* Acordes (mesma lista e cores do site) */
+const ACCORDS=[["amadeirado","Amadeirado","#7b5b3e"],["citrico","Cítrico","#e8dc78"],["aromatico","Aromático","#6fa199"],["especiado-fresco","Especiado fresco","#a9c77c"],["especiado-quente","Especiado quente","#b4643f"],["atalcado","Atalcado","#ebe2d4"],["almiscarado","Almiscarado","#dcd5e2"],["frutado","Frutado","#e69a82"],["iris","Íris","#c8c2dc"],["canela","Canela","#d29a6c"],["verde","Verde","#86b089"],["ambar","Âmbar","#c58a3f"],["baunilha","Baunilha","#eedcb2"],["couro","Couro","#6a4a3a"],["floral","Floral","#e7bac6"],["aquatico","Aquático","#8fc2d3"],["fresco","Fresco","#bcdde0"],["doce","Doce","#e6a9b4"],["lavanda","Lavanda","#a89ac8"],["oud","Oud","#4f3c34"],["tabaco","Tabaco","#8a6542"],["defumado","Defumado","#8c8985"],["terroso","Terroso","#8b7b5d"],["herbal","Herbal","#9bb48b"],["patchouli","Patchouli","#6f6a45"],["mineral","Mineral","#b3b9bd"]].map(([key,label,color])=>({key,label,color}));
+const ACC=Object.fromEntries(ACCORDS.map(a=>[a.key,a]));
+const MAX_ACC=10;
+function textOn(hex){const n=parseInt(hex.slice(1),16);const l=[(n>>16)&255,(n>>8)&255,n&255].map(c=>{c/=255;return c<=.03928?c/12.92:((c+.055)/1.055)**2.4});return .2126*l[0]+.7152*l[1]+.0722*l[2]>.3?"#16191d":"#ffffff"}
+const accW=v=>30+v*.7;
+const sortAcc=a=>a.slice().sort((x,y)=>y.v-x.v);
+function accordBars(list,delay){
+  if(!list||!list.length)return"";
+  return `<div class="acc" style="animation-delay:${delay}ms"><p class="caps t">Acordes principais</p><ul aria-label="Acordes principais, do mais marcante ao mais suave">${sortAcc(list).map((a,i)=>{const c=ACC[a.k];return `<li><span class="bar-a" style="--w:${accW(a.v)}%;background:${c.color};color:${textOn(c.color)};animation-delay:${delay+i*70}ms"><span style="animation-delay:${delay+i*70+250}ms">${c.label}</span></span></li>`}).join("")}</ul></div>`;
+}
+const A=s=>s.split(",").map(x=>{const [k,v]=x.split(":");return {k,v:+v}});
+
+let pid=0;
+const P=(name,brand,ml,price,av,promo,c,desc,acc)=>({id:++pid,name,brand,ml,price,av,promo,c,desc,acc:A(acc)});
+const products=[
+  P("Bleu de Chanel Parfum","Chanel",100,129000,true,true,["#e9ebee","#cfd4da","#2a3a52","#15181d"],"Amadeirado aromático de assinatura limpa: toranja e limão na saída, cedro e sândalo na base. Elegante do escritório ao jantar.","citrico:100,amadeirado:90,aromatico:78,especiado-fresco:66,ambar:55,almiscarado:45"),
+  P("Sauvage Elixir","Dior",60,118000,true,true,["#ecebe7","#d8d5cc","#4a3a5e","#1a1a1c"],"Concentração intensa com especiarias, lavanda e alcaçuz sobre âmbar e madeiras. Rastro marcante e fixação muito longa.","especiado-quente:100,lavanda:88,ambar:80,amadeirado:70,doce:55,aromatico:50"),
+  P("Aventus","Creed",100,249000,true,true,["#efeeea","#dcdad2","#1c1f22","#c7c3b8"],"Abacaxi e bergamota sobre bétula defumada e almíscar. Um clássico moderno, confiante e versátil.","frutado:100,amadeirado:85,defumado:72,citrico:62,almiscarado:55,verde:45"),
+  P("Terre d'Hermès","Hermès",100,98000,true,false,["#eeece6","#dad4c6","#b9824f","#2b2621"],"Mineral e terroso: laranja, pimenta e vetiver. Sóbrio, sofisticado, ideal para o dia.","citrico:100,terroso:85,amadeirado:80,mineral:66,especiado-fresco:55"),
+  P("Y Eau de Parfum","Yves Saint Laurent",100,89000,true,false,["#ebedee","#d2d8dc","#31455c","#d9dcdf"],"Fresco e aromático, com maçã, sálvia e fava tonka. Fácil de usar em qualquer ocasião.","aromatico:100,fresco:85,frutado:70,amadeirado:60,ambar:48"),
+  P("Acqua di Giò Profondo","Giorgio Armani",75,82000,false,false,["#eaeeef","#cdd9dc","#3e6a77","#d4d8da"],"Aquático com notas marinhas, bergamota e patchouli. Leve, perfeito para o calor.","aquatico:100,citrico:85,aromatico:70,mineral:58,amadeirado:45"),
+  P("Le Male Elixir","Jean Paul Gaultier",75,94000,true,false,["#efede8","#ddd5c5","#a6773d","#1a1a1a"],"Lavanda, mel e fava tonka num oriental envolvente. Para a noite.","baunilha:100,lavanda:85,doce:78,ambar:70,tabaco:50"),
+  P("Oud Wood","Tom Ford",50,189000,false,false,["#edebe6","#d6d0c4","#4b3527","#17161a"],"Oud raro com pau-rosa, cardamomo e sândalo. Amadeirado, quente e discreto.","oud:100,amadeirado:90,especiado-quente:68,ambar:58,defumado:48"),
+];
+
+/* ---------- utilidades de camada ---------- */
+let toastT;
+function toast(t){document.querySelectorAll(".toast").forEach(e=>e.remove());const el=document.createElement("div");el.className="toast";el.setAttribute("role","status");el.textContent=t;document.body.appendChild(el);clearTimeout(toastT);toastT=setTimeout(()=>el.remove(),2600)}
+function openLayer(html){$("#layer").innerHTML=`<div class="ov"><div class="bg" data-close></div>${html}</div>`;document.body.style.overflow="hidden";const f=$("#layer [data-focus]");f&&f.focus({preventScroll:true})}
+function closeLayer(animate){const ov=$("#layer .ov");if(!ov)return;const done=()=>{$("#layer").innerHTML="";document.body.style.overflow=""};if(animate){ov.classList.add("closing");setTimeout(done,280)}else done()}
+$("#layer").addEventListener("click",e=>{if(e.target.closest("[data-close]"))closeLayer(true)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLayer(true)});
+const X='<svg width="13" height="13" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13"/></svg>';
+const ARROW='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg>';
+const WA='<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.3Z"/></svg>';
+const avail=p=>`<span class="av${p.av?"":" no"}">${p.av?"Disponível":"Indisponível"}</span>`;
+
+/* ================= VITRINE ================= */
+let q="",slide=0,paused=false,slideT=null;
+const SLIDE_MS=6500;
+function renderStore(){
+  $("#store").innerHTML=`
+  <header class="s-head" id="shead"><div class="wrap">
+    <a class="brand" href="#" aria-label="${esc(settings.name)}"><span class="mono">${esc(settings.name.charAt(0))}</span><span><b>${esc(settings.name)}</b><small>${esc(settings.tagline)}</small></span></a>
+    <button type="button" class="ig" aria-label="Instagram da loja"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg><span>Instagram</span></button>
+  </div></header>
+  <main class="wrap"><div id="hero"></div>
+    <section aria-labelledby="cat"><div class="cat-h"><div><p class="caps bronze" style="margin:0">A coleção</p><h2 id="cat">Catálogo</h2></div>
+      <label class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Pesquisar perfume ou marca" aria-label="Pesquisar perfume" value="${esc(q)}"></label></div>
+      <div id="gridbox"></div></section>
+  </main>
+  <footer class="s-foot"><p class="disp" style="font-size:20px;letter-spacing:.04em">${esc(settings.name)}</p><small>© ${new Date().getFullYear()} · Atendimento pelo WhatsApp</small></footer>`;
+  $("#q").addEventListener("input",e=>{q=e.target.value;renderGrid()});
+  renderHero(true);renderGrid();
+}
+function promos(){return products.filter(p=>p.promo)}
+function renderHero(full){
+  const items=promos(),box=$("#hero");if(!box)return;
+  clearTimeout(slideT);
+  if(!items.length){box.innerHTML="";return}
+  if(slide>=items.length)slide=0;
+  const c=items[slide],many=items.length>1;
+  if(full||!box.querySelector(".hero")||box.querySelectorAll(".slide").length!==items.length){
+    box.innerHTML=`<section class="hero" aria-roledescription="carrossel" aria-label="Promoções"><div class="h-text"><div id="htxt"></div><div class="thumbs" id="thumbs" role="tablist" aria-label="Escolher promoção"></div></div>
+    <button class="h-img" id="himg" aria-label="Ver detalhes">${items.map((p,i)=>`<div class="slide${i===slide?" on":""}" aria-hidden="${i!==slide}">${art(p,"h")}</div>`).join("")}</button></section>`;
+    const sec=box.querySelector(".hero");
+    const setPlay=()=>{const bar=box.querySelector(".bar i");if(bar)bar.style.animationPlayState=paused?"paused":"running"};
+    sec.addEventListener("mouseenter",()=>{paused=true;setPlay()});
+    sec.addEventListener("mouseleave",()=>{paused=false;setPlay()});
+  }
+  box.querySelectorAll(".slide").forEach((s,i)=>{s.classList.toggle("on",i===slide);s.setAttribute("aria-hidden",i!==slide)});
+  $("#himg").dataset.p=c.id;$("#himg").setAttribute("aria-label","Ver "+c.name);
+  const pad=n=>String(n).padStart(2,"0");
+  $("#htxt").innerHTML=`<p class="caps bronze rise" style="margin:0">Promoção${many?`<span class="count num">${pad(slide+1)} / ${pad(items.length)}</span>`:""}</p>
+    <p class="caps br rise" style="animation-delay:90ms;margin-bottom:0">${esc(c.brand)}</p>
+    <h1 class="rise" style="animation-delay:150ms">${esc(c.name)}</h1>
+    <p class="d rise" style="animation-delay:220ms">${esc(c.desc)}</p>
+    <div class="h-cta rise" style="animation-delay:290ms"><button class="btn-dark" data-p="${c.id}">Ver detalhes ${ARROW}</button>${c.price?`<span class="h-price num">${brl(c.price)}</span>`:""}</div>`;
+  const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  $("#thumbs").innerHTML=many?items.map((p,i)=>`<button class="thumb-b" role="tab" aria-selected="${i===slide}" aria-label="${esc(p.name)}" data-slide="${i}">${art(p,"t")}<span class="bar">${i===slide?(reduced?'<i style="animation:none"></i>':`<i style="animation-duration:${SLIDE_MS}ms;animation-play-state:${paused?"paused":"running"}"></i>`):""}</span></button>`).join(""):"";
+  // a barra de progresso comanda a troca: pausar a barra pausa o carrossel no ponto exato
+  const bar=$("#thumbs .bar i");
+  if(bar&&!reduced)bar.addEventListener("animationend",()=>{slide=(slide+1)%promos().length;renderHero()},{once:true});
+}
+function renderGrid(){
+  const list=products.filter(p=>!q||norm(p.name+" "+p.brand).includes(norm(q))).sort((a,b)=>(b.av-a.av)||a.name.localeCompare(b.name));
+  $("#gridbox").innerHTML=list.length?`<ul class="grid">${list.map((p,i)=>`<li class="rise" style="animation-delay:${Math.min(i,11)*55}ms"><button class="card${p.av?"":" off"}" data-p="${p.id}">
+    <span class="ph" style="display:block"><span class="zoom">${art(p,"g")}</span>${p.promo?'<span class="caps promo">Promoção</span>':""}<span class="more">Ver detalhes ${ARROW}</span></span>
+    <span class="caps b">${esc(p.brand)}</span><span class="n">${esc(p.name)}</span>${avail(p)}</button></li>`).join("")}</ul>`
+    :`<div class="nf rise"><p class="disp">Não encontramos “${esc(q.trim())}”.</p><span>Não está no catálogo, mas podemos encomendar para você.</span>
+      <button type="button" class="wa-btn" data-msg="${waHref(`Olá! Procurei pelo perfume "${q.trim().slice(0,80)}" no catálogo e não encontrei. Vocês conseguem encomendar para mim?`)}"><span class="dot">${WA}</span>Encomendar pelo WhatsApp</button>
+      <button type="button" class="clear" data-clear>Ver todo o catálogo</button></div>`;
+}
+const waHref=msg=>esc(msg);
+$("#store").addEventListener("click",e=>{
+  if(e.target.closest("[data-clear]")){q="";$("#q").value="";renderGrid();$("#q").focus();return}
+  const t=e.target.closest("[data-slide]");if(t){slide=+t.dataset.slide;renderHero();return}
+  const b=e.target.closest("[data-p]");if(b)openProduct(+b.dataset.p);
+});
+window.addEventListener("scroll",()=>{const h=$("#shead");if(h)h.classList.toggle("scrolled",scrollY>8)},{passive:true});
+
+function openProduct(id){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  const msg=`Olá! Tenho interesse no perfume ${p.brand} ${p.name} ${p.ml} ml que vi no catálogo. Gostaria de saber mais informações e realizar meu pedido.`;
+  const href=esc(msg);
+  const d=i=>`style="animation-delay:${i}ms"`;
+  openLayer(`<div class="pm" role="dialog" aria-modal="true" aria-label="${esc(p.name)}">
+    <button class="xbtn" data-close data-focus aria-label="Fechar">${X}</button>
+    <div class="pi">${art(p,"m")}</div>
+    <div class="pt"><p class="caps" style="margin:0;color:var(--bronze);animation-delay:80ms">${esc(p.brand)}</p><h3 ${d(140)}>${esc(p.name)}</h3>
+      <div class="meta" ${d(200)}><span class="num">${p.ml} ml</span>${avail(p).replace('class="av','style="margin:0" class="av')}</div>
+      ${p.price?`<p class="price num" ${d(250)}>${brl(p.price)}</p>`:""}
+      ${accordBars(p.acc,320)}
+      ${p.desc?`<p class="desc" ${d(300)}>${esc(p.desc)}</p>`:""}
+      <div class="order" ${d(360)}>${p.av?`<button type="button" class="wa-btn" data-msg="${href}"><span class="dot">${WA}</span>Chamar no WhatsApp</button><small>A conversa abre com o nome do perfume já escrito.</small>`:`<button type="button" class="wa-btn outline" data-msg="${waHref(`Olá! Vi no catálogo que o perfume ${p.brand} ${p.name} ${p.ml} ml está indisponível no momento. Gostaria de encomendar. Pode me passar o prazo e o valor?`)}"><span class="dot">${WA}</span>Encomendar pelo WhatsApp</button><small>Sem estoque agora, mas podemos encomendar para você.</small>`}</div>
+    </div></div>`);
+}
+
+/* ================= PAINEL ================= */
+let aq="";
+const sw=(label,on,act,id)=>`<button class="sw" role="switch" aria-checked="${on}" data-act="${act}" data-id="${id??""}"><span class="tr"></span>${label}</button>`;
+function renderAdmin(){
+  $("#admin").innerHTML=`<header class="a-head"><div class="wrap"><div style="min-width:0"><b>${esc(settings.name)}</b><small>Painel · Produtos</small></div>
+    <div class="acts"><button class="btn gh sm" id="to-store">Ver site</button><button class="btn gh sm" data-act="cfg" aria-label="Configurações da loja"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span class="tx">Configurações</span></button><button class="btn gh sm" data-act="logout">Sair</button></div></div></header>
+  <main class="wrap a-main"><div class="a-top"><div><h1>Perfumes</h1><p class="num" id="counts"></p></div><button class="btn pri" data-act="new">+ Novo perfume</button></div>
+    <input id="aq" class="field" style="max-width:320px" type="search" placeholder="Pesquisar por nome ou marca" aria-label="Pesquisar perfumes" value="${esc(aq)}">
+    <div id="alist"></div></main>`;
+  $("#aq").addEventListener("input",e=>{aq=e.target.value;renderList()});
+  renderList();
+}
+function renderList(){
+  const c=$("#counts");if(!c)return;
+  c.textContent=`${products.length} cadastrados · ${products.filter(p=>p.av).length} disponíveis · ${products.filter(p=>p.promo).length} em promoção`;
+  const list=products.filter(p=>!aq||norm(p.name+" "+p.brand).includes(norm(aq)));
+  $("#alist").innerHTML=list.length?`<ul class="plist">${list.map((p,i)=>`<li style="animation-delay:${Math.min(i,10)*35}ms">
+    <div class="pthumb">${art(p,"l")}</div>
+    <div class="pinfo"><span class="caps b">${esc(p.brand||"—")}</span><span class="n">${esc(p.name)}</span><span class="m num">${[p.ml?p.ml+" ml":"",p.price!=null?brl(p.price):"Sem preço"].filter(Boolean).join(" · ")}</span></div>
+    <div class="pctl"><div style="display:flex;gap:20px;flex-wrap:wrap">${sw("Disponível",p.av,"t-av",p.id)}${sw("Promoção",p.promo,"t-promo",p.id)}</div>
+      <div class="btns"><button class="btn gh sm" data-act="edit" data-id="${p.id}">Editar</button><button class="btn dg sm" data-act="del" data-id="${p.id}">Excluir</button></div></div></li>`).join("")}</ul>`
+    :`<p class="empty">Nenhum perfume encontrado.</p>`;
+}
+function modal(title,body,foot,small){return `<div class="am${small?" small":""}" role="dialog" aria-modal="true" aria-label="${esc(title)}"><header><h3>${esc(title)}</h3><button class="xs" data-close aria-label="Fechar">${X}</button></header><div class="bd">${body}</div><footer>${foot}</footer></div>`}
+
+let draftImg=null,draftAcc=[];
+function renderAE(){
+  const box=$("#ae");if(!box)return;
+  const chosen=new Set(draftAcc.map(a=>a.k)),full=draftAcc.length>=MAX_ACC;
+  box.innerHTML=`<div class="ae-head"><span class="lab" style="margin:0">Acordes principais</span><span class="num" style="font-size:11px;color:var(--ink-3)">${draftAcc.length}/${MAX_ACC}</span></div>
+  ${draftAcc.length?`<ul class="ae-list">${draftAcc.map(a=>{const c=ACC[a.k];return `<li><div class="ae-track"><span class="fill" style="width:${accW(a.v)}%;background:${c.color};color:${textOn(c.color)}">${c.label}</span><input type="range" min="10" max="100" step="5" value="${a.v}" data-acc="${a.k}" aria-label="Intensidade de ${c.label}"></div><button type="button" class="ae-x" data-acc-x="${a.k}" aria-label="Remover ${c.label}">${X}</button></li>`}).join("")}</ul>`:""}
+  <p class="hint">${draftAcc.length?"Arraste sobre a barra para ajustar a intensidade. A mais forte fica em cima.":"Toque nos acordes do perfume, do mais marcante ao mais suave."}</p>
+  <div class="chips">${ACCORDS.filter(a=>!chosen.has(a.key)).map(a=>`<button type="button" class="chip" data-acc-add="${a.key}" ${full?"disabled":""}><i style="background:${a.color}"></i>${a.label}</button>`).join("")}</div>`;
+  box.querySelectorAll("[data-acc]").forEach(inp=>{
+    inp.addEventListener("input",e=>{const a=draftAcc.find(x=>x.k===e.target.dataset.acc);a.v=+e.target.value;e.target.previousElementSibling.style.width=accW(a.v)+"%"});
+    inp.addEventListener("change",()=>{draftAcc=sortAcc(draftAcc);renderAE()});
+  });
+}
+document.addEventListener("click",e=>{
+  const add=e.target.closest("[data-acc-add]");
+  if(add){if(draftAcc.length>=MAX_ACC)return;const min=draftAcc.length?Math.min(...draftAcc.map(a=>a.v)):110;draftAcc.push({k:add.dataset.accAdd,v:Math.max(30,min-10)});renderAE();return}
+  const x=e.target.closest("[data-acc-x]");
+  if(x){draftAcc=draftAcc.filter(a=>a.k!==x.dataset.accX);renderAE()}
+});
+function openForm(p){
+  draftImg=null;draftAcc=p?sortAcc(p.acc||[]):[];
+  openLayer(modal(p?"Editar perfume":"Novo perfume",`
+    <button type="button" class="drop" id="drop"><span class="dp" id="dp">${p?art(p,"f"):""}</span><span><b>${p?"Trocar foto":"Adicionar foto"}</b><span>Toque para escolher ou arraste aqui. A foto é reduzida automaticamente para a vitrine carregar rápido.</span></span></button>
+    <input type="file" id="f-file" accept="image/*" hidden>
+    <div><label class="lab" for="f-name">Nome do perfume *</label><input id="f-name" class="field" value="${esc(p?.name)}" placeholder="Bleu de Chanel Parfum" data-focus></div>
+    <div class="two"><div><label class="lab" for="f-brand">Marca</label><input id="f-brand" class="field" value="${esc(p?.brand)}" placeholder="Chanel"></div><div><label class="lab" for="f-ml">Volume (ml)</label><input id="f-ml" class="field" inputmode="numeric" value="${p?.ml??""}" placeholder="100"></div></div>
+    <div><label class="lab" for="f-price">Preço (opcional)</label><div class="prefix"><span>R$</span><input id="f-price" class="field" inputmode="decimal" value="${toInput(p?.price)}" placeholder="890,00"></div></div>
+    <div><label class="lab" for="f-desc">Descrição</label><textarea id="f-desc" class="field" rows="3" placeholder="Notas de saída, coração e fundo, ocasião, fixação…">${esc(p?.desc)}</textarea></div>
+    <div id="ae" style="border-top:1px solid var(--line);padding-top:16px"></div>
+    <div class="flags">${sw("Disponível",p?p.av:true,"f-av")}${sw("Mostrar em Promoções",p?p.promo:false,"f-promo")}</div>
+    <div id="f-err"></div>`,
+    `<button class="btn gh" data-close>Cancelar</button><button class="btn pri" data-act="save" data-id="${p?.id??""}">Salvar</button>`));
+  renderAE();
+  const drop=$("#drop"),file=$("#f-file");
+  const pick=f=>{if(!f||!f.type.startsWith("image/")){$("#f-err").innerHTML='<p class="err">Escolha um arquivo de imagem.</p>';return}const r=new FileReader();r.onload=()=>{draftImg=r.result;$("#dp").innerHTML=`<img src="${r.result}" alt="">`;drop.querySelector("b").textContent="Trocar foto"};r.readAsDataURL(f)};
+  drop.addEventListener("click",()=>file.click());
+  file.addEventListener("change",()=>pick(file.files[0]));
+  drop.addEventListener("dragover",e=>{e.preventDefault();drop.classList.add("drag")});
+  drop.addEventListener("dragleave",()=>drop.classList.remove("drag"));
+  drop.addEventListener("drop",e=>{e.preventDefault();drop.classList.remove("drag");pick(e.dataTransfer.files[0])});
+}
+function saveForm(id){
+  const err=m=>$("#f-err").innerHTML=`<p class="err">${esc(m)}</p>`;
+  const name=$("#f-name").value.trim();if(!name)return err("Informe o nome do perfume.");
+  const ml=$("#f-ml").value.replace(/\D/g,"");
+  const pt=$("#f-price").value.trim(),price=pt?parseBRL(pt):null;if(pt&&price==null)return err("Preço inválido. Ex.: 890,00");
+  const data={name,brand:$("#f-brand").value.trim(),ml:ml?+ml:null,price,desc:$("#f-desc").value.trim(),acc:sortAcc(draftAcc),
+    av:$('[data-act="f-av"]').getAttribute("aria-checked")==="true",promo:$('[data-act="f-promo"]').getAttribute("aria-checked")==="true"};
+  if(id){Object.assign(products.find(x=>x.id===+id),data);toast("Perfume atualizado.")}
+  else{const pal=[["#eeedea","#d9d6cd","#5a4a38","#151619"],["#eaedee","#cfd6da","#2f4a5c","#e3e3e0"],["#edede8","#d7d7cc","#3e4d3a","#1a1a1a"]];products.unshift({id:++pid,...data,c:pal[pid%3]});toast("Perfume cadastrado.")}
+  closeLayer(true);renderList();renderStore();
+}
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act],#to-store");if(!b)return;
+  if(b.id==="to-store")return show("store");
+  const a=b.dataset.act,id=+b.dataset.id,p=products.find(x=>x.id===id);
+  switch(a){
+    case"t-av":p.av=!p.av;b.setAttribute("aria-checked",p.av);toast(p.av?"Marcado como disponível.":"Marcado como indisponível.");setTimeout(()=>{renderList();renderStore()},320);break;
+    case"t-promo":p.promo=!p.promo;b.setAttribute("aria-checked",p.promo);toast(p.promo?"Adicionado às promoções.":"Removido das promoções.");setTimeout(()=>{renderList();renderStore()},320);break;
+    case"f-av":case"f-promo":b.setAttribute("aria-checked",b.getAttribute("aria-checked")!=="true");break;
+    case"new":openForm(null);break;
+    case"edit":openForm(p);break;
+    case"save":saveForm(b.dataset.id);break;
+    case"del":openLayer(modal("Excluir perfume",`<p style="margin:0;color:var(--ink-2)">Excluir <strong style="font-weight:500;color:var(--ink)">${esc(p.name)}</strong> do catálogo? A foto também será apagada.</p>`,`<button class="btn gh" data-close>Cancelar</button><button class="btn dgf" data-act="del-ok" data-id="${id}">Excluir</button>`,true));break;
+    case"del-ok":products.splice(products.findIndex(x=>x.id===id),1);closeLayer(true);toast("Perfume excluído.");renderList();renderStore();break;
+    case"cfg":openLayer(modal("Configurações da loja",`<div><label class="lab" for="c1">Nome da loja</label><input id="c1" class="field" value="${esc(settings.name)}" data-focus></div><div><label class="lab" for="c2">Frase curta abaixo do nome</label><input id="c2" class="field" value="${esc(settings.tagline)}"></div><div><label class="lab" for="c3">WhatsApp de atendimento</label><input id="c3" class="field" value="(65) 99999-0000" inputmode="tel"><p class="hint">O botão “Chamar no WhatsApp” abre conversa com este número.</p></div><div><label class="lab" for="c4">Instagram</label><input id="c4" class="field" value="@${esc(settings.ig)}"></div><div id="c-err"></div>`,`<button class="btn gh" data-close>Cancelar</button><button class="btn pri" data-act="cfg-save">Salvar</button>`));break;
+    case"cfg-save":{const n=$("#c1").value.trim();if(!n){$("#c-err").innerHTML='<p class="err">Informe o nome da loja.</p>';return}settings.name=n;settings.tagline=$("#c2").value.trim();settings.ig=$("#c4").value.trim().replace(/^@/,"")||settings.ig;closeLayer(true);toast("Configurações salvas.");renderAdmin();renderStore();break}
+    case"logout":toast("No site real, isto encerra a sessão.");break;
+  }
+});
+
+function show(w){
+  $("#store").hidden=w!=="store";$("#admin").hidden=w!=="admin";
+  $("#go-store").setAttribute("aria-pressed",w==="store");$("#go-admin").setAttribute("aria-pressed",w==="admin");
+  closeLayer(false);
+  if(w==="admin"){clearTimeout(slideT);renderAdmin()}else renderStore();
+  scrollTo(0,0);
+}
+$("#go-store").addEventListener("click",()=>show("store"));
+$("#go-admin").addEventListener("click",()=>show("admin"));
+renderStore();
+if(location.hash==="#painel")show("admin");
+
+/* ================= SIMULAÇÃO (somente nesta demonstração) =================
+   No site real, os botões abrem o WhatsApp e o Instagram de verdade. */
+let demoT=[];
+const later=(fn,ms)=>demoT.push(setTimeout(fn,ms));
+function closeDemo(){demoT.forEach(clearTimeout);demoT=[];$("#demo").innerHTML="";if(!$("#layer .ov"))document.body.style.overflow=""}
+function hhmm(){return new Intl.DateTimeFormat("pt-BR",{hour:"2-digit",minute:"2-digit",timeZone:"America/Cuiaba"}).format(new Date())}
+const TICKS='<svg class="ticks" width="16" height="11" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 6l3 3 6-7M6 9l1 1 7-8"/></svg>';
+const SEND='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 20.5V14l9-2-9-2V3.5L22 12 3 20.5Z"/></svg>';
+function phoneShell(cls,inner){return `<div class="phone"><button class="ph-close" data-demo-close aria-label="Fechar">${X}</button><div class="screen ${cls}"><div class="notch"></div><div class="sbar"><span class="num">${hhmm()}</span><span>●●● ▮</span></div>${inner}</div></div>`}
+function side(eyebrow,title,text,again){return `<div class="demo-side"><p class="caps">${eyebrow}</p><h3>${title}</h3><p>${text}</p><div class="acts2">${again?`<button data-demo-again>Ver de novo</button>`:""}<button data-demo-close>Voltar ao site</button></div></div>`}
+let lastDemo=null;
+
+function demoWhatsApp(msg){
+  lastDemo=()=>demoWhatsApp(msg);
+  closeDemo();document.body.style.overflow="hidden";
+  const kind=/não encontrei/.test(msg)?"search":/indisponível/.test(msg)?"order":"buy";
+  const reply={buy:"Olá! Tudo ótimo, obrigado pelo contato 🙂\nTemos sim, pronta entrega. Posso separar o seu?",
+    order:"Olá! Conseguimos encomendar sim 🙂\nJá te passo o prazo e o valor certinho.",
+    search:"Olá! Conseguimos sim 🙂\nMe confirma o tamanho em ml que você prefere?"}[kind];
+  $("#demo").innerHTML=`<div class="demo" role="dialog" aria-modal="true" aria-label="Simulação do WhatsApp"><div class="bg" data-demo-close></div>
+    ${side("Como funciona","O cliente cai direto na sua conversa","Um toque no botão abre o WhatsApp do "+esc(settings.name)+" com a mensagem já escrita, com o nome do perfume. É só ele enviar.",true)}
+    ${phoneShell("wa-scr",`<div class="wa-top"><span class="back">‹</span><span class="wa-av">${esc(settings.name.charAt(0))}</span><span><b>${esc(settings.name)} Perfumaria</b><small id="wa-st">online</small></span></div>
+      <div class="wa-body" id="wa-body"><span class="wa-day">HOJE</span><span class="wa-sec">Conta comercial · As mensagens vêm do catálogo do site</span></div>
+      <div class="wa-input"><div class="wa-field" id="wa-field"></div><span class="wa-send" id="wa-send">${SEND}</span></div>`)}
+  </div>`;
+  const field=$("#wa-field"),body=$("#wa-body"),st=$("#wa-st");
+  const add=(cls,html)=>{const b=document.createElement("div");b.className="bub "+cls;b.innerHTML=html;body.appendChild(b);body.scrollTop=body.scrollHeight;return b};
+  const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduced){add("out",`${esc(msg)}<span class="meta2">${hhmm()} ${TICKS.replace('class="ticks"','class="ticks read"')}</span>`);add("in",`${esc(reply)}<span class="meta2">${hhmm()}</span>`);return}
+  // 1) digitando a mensagem pronta
+  const steps=28;for(let i=1;i<=steps;i++)later(()=>{field.textContent=msg.slice(0,Math.ceil(msg.length*i/steps))},500+i*42);
+  const tSend=500+steps*42+500;
+  // 2) envia
+  later(()=>{$("#wa-send").classList.add("press")},tSend-120);
+  later(()=>{$("#wa-send").classList.remove("press");field.textContent="";add("out",`${esc(msg)}<span class="meta2">${hhmm()} ${TICKS}</span>`)},tSend);
+  // 3) lida
+  later(()=>{const t=body.querySelector(".bub.out:last-of-type .ticks");t&&t.classList.add("read")},tSend+1000);
+  // 4) loja digitando e responde
+  let typing;
+  later(()=>{st.textContent="digitando…";st.classList.add("typing");typing=add("in",'<span class="dots"><i></i><i></i><i></i></span>')},tSend+1700);
+  later(()=>{typing&&typing.remove();st.textContent="online";st.classList.remove("typing");add("in",`${esc(reply)}<span class="meta2">${hhmm()}</span>`)},tSend+3600);
+}
+
+function demoInstagram(){
+  lastDemo=null;
+  closeDemo();document.body.style.overflow="hidden";
+  const posts=products.concat(products).slice(0,12);
+  const hl=[["Novidades",products[0]],["Promoções",products[1]],["Clientes",products[2]],["Árabes",products[7]]];
+  $("#demo").innerHTML=`<div class="demo" role="dialog" aria-modal="true" aria-label="Simulação do Instagram"><div class="bg" data-demo-close></div>
+    ${side("Como funciona","Seu Instagram a um toque","O botão no topo do site leva o cliente ao perfil da loja, para ver novidades, seguir e chamar no direct.",false)}
+    ${phoneShell("ig-scr",`<div class="ig-top"><span>‹</span><span>${esc(settings.ig)}</span><span>⋯</span></div>
+      <div class="ig-body">
+        <div class="ig-head"><div class="ig-ring"><span>${esc(settings.name.charAt(0))}</span></div>
+          <div class="ig-stats"><div><b class="num">${posts.length*12}</b>posts</div><div><b class="num" id="ig-fol">8.427</b>seguidores</div><div><b class="num">312</b>seguindo</div></div></div>
+        <div class="ig-bio"><b>${esc(settings.name)} Perfumaria</b><br><span class="cat">Loja de perfumes</span><br>Fragrâncias masculinas de alto padrão<br>Originais · Pronta entrega e encomendas<br>Pedidos pelo WhatsApp 👇<br><a>🔗 Catálogo e pedidos</a></div>
+        <div class="ig-btns"><span class="f" id="ig-follow">Seguir</span><span>Mensagem</span></div>
+        <div class="ig-hl">${hl.map(([n,p])=>`<div><i><span>${art(p,"hl")}</span></i>${n}</div>`).join("")}</div>
+        <div class="ig-tabs"><span class="on">▦ Posts</span><span>▶ Reels</span><span>◎ Marcados</span></div>
+        <div class="ig-grid">${posts.map((p,i)=>`<div style="animation-delay:${i*50}ms">${art(p,"ig"+i)}</div>`).join("")}</div>
+      </div>`)}
+  </div>`;
+  later(()=>{const f=$("#ig-follow");if(f){f.textContent="Seguindo";f.classList.add("done");$("#ig-fol").textContent="8.428"}},2200);
+}
+
+document.addEventListener("click",e=>{
+  if(e.target.closest("[data-demo-close]")){e.preventDefault();closeDemo();return}
+  if(e.target.closest("[data-demo-again]")){lastDemo&&lastDemo();return}
+  const wa=e.target.closest(".wa-btn[data-msg]");
+  if(wa){e.preventDefault();demoWhatsApp(wa.dataset.msg||"");return}
+  const ig=e.target.closest(".ig");
+  if(ig){e.preventDefault();demoInstagram()}
+},true);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#demo .demo")){e.stopImmediatePropagation();closeDemo()}},true);
+
+/* ================= APRESENTAÇÃO GUIADA ================= */
+const tour={on:false,i:0,paused:false,timers:[],raf:0,cleanup:null};
+const tLater=(fn,ms)=>tour.timers.push(setTimeout(fn,ms));
+const mainP=()=>products.find(p=>p.av&&p.acc&&p.acc.length)||products[0];
+const unavP=()=>products.find(p=>!p.av)||products[products.length-1];
+const interestMsg=p=>`Olá! Tenho interesse no perfume ${p.brand} ${p.name} ${p.ml} ml que vi no catálogo. Gostaria de saber mais informações e realizar meu pedido.`;
+function resetSearch(){if(q){q="";const i=$("#q");if(i)i.value="";renderGrid()}}
+function storeScene(){closeDemo();closeLayer(false);if($("#store").hidden)show("store");resetSearch()}
+function adminScene(){closeDemo();closeLayer(false);if($("#admin").hidden)show("admin");if(aq){aq="";renderList();const a=$("#aq");if(a)a.value=""}}
+function typeSearch(text,start){for(let i=1;i<=text.length;i++)tLater(()=>{q=text.slice(0,i);const inp=$("#q");if(inp)inp.value=q;renderGrid()},start+i*140)}
+function scrollToEl(sel,block){const el=$(sel);if(el)el.scrollIntoView({behavior:"smooth",block:block||"center"})}
+function replayBars(){document.querySelectorAll(".pm .bar-a, .pm .bar-a span").forEach(el=>{el.style.animation="none";void el.offsetWidth;el.style.animation=""})}
+const liOf=pred=>{const i=products.findIndex(pred);return i<0?1:i+1};
+
+const STEPS=[
+ {t:"Sua marca no topo",x:()=>`O nome ${settings.name} sempre visível e o Instagram a um toque. Ao rolar a página, o topo acompanha de forma discreta.`,
+  run(){storeScene();scrollTo({top:0})},el:()=>[".s-head"],dur:6500},
+ {t:"Promoções em destaque",x:()=>"Os perfumes em promoção aparecem primeiro e trocam sozinhos, com uma transição suave. Você escolhe quais entram com um toque no painel.",
+  run(){storeScene();scrollTo({top:0})},el:()=>["#hero .hero"],dur:8000},
+ {t:"O catálogo completo",x:()=>"Foto, marca, nome e disponibilidade de cada perfume. Os indisponíveis continuam à vista, em tom mais apagado.",
+  run(){storeScene();tLater(()=>scrollToEl(".cat-h","start"),100)},el:()=>[".cat-h",".grid li:nth-child(1)",".grid li:nth-child(2)",".grid li:nth-child(3)",".grid li:nth-child(4)"],dur:7000,noAutoScroll:true},
+ {t:"Busca instantânea",x:()=>"O cliente digita e a lista filtra na hora, por nome ou por marca.",
+  run(){storeScene();tLater(()=>scrollToEl(".cat-h","start"),100);typeSearch("Dior",900);tLater(()=>scrollToEl(".cat-h","start"),900+4*140+120)},el:()=>[".search","#gridbox .grid li:nth-child(1)"],dur:7000,noAutoScroll:true},
+ {t:"Detalhes sem trocar de página",x:()=>"Um toque abre a foto ampliada, o volume, o preço e a disponibilidade numa janela elegante.",
+  run(){storeScene();openProduct(mainP().id)},el:()=>[".pm"],dur:6500},
+ {t:"Acordes principais",x:()=>"Como no Fragrantica: as barras mostram as notas que mais se destacam no perfume, da mais marcante à mais suave.",
+  run(){if(!$(".pm")){storeScene();openProduct(mainP().id)}tLater(()=>{scrollToEl(".pm .acc");replayBars()},350)},el:()=>[".pm .acc"],dur:7000,noAutoScroll:true},
+ {t:"Pedido direto no WhatsApp",x:()=>`O botão abre a conversa com o ${settings.name} já com o nome do perfume escrito. O cliente só aperta enviar.`,
+  run(){if(!$(".pm")){storeScene();openProduct(mainP().id)}demoWhatsApp(interestMsg(mainP()))},el:()=>[".demo .phone"],dur:10500},
+ {t:"Sem estoque? Vira encomenda",x:()=>"O perfume indisponível continua no catálogo, e o botão muda para Encomendar pelo WhatsApp, com uma mensagem própria.",
+  run(){storeScene();openProduct(unavP().id);tLater(()=>scrollToEl(".pm .order"),500)},el:()=>[".pm .order"],dur:7500,noAutoScroll:true},
+ {t:"Não achou? Peça mesmo assim",x:()=>"Se a busca não encontra o perfume, o cliente já pode pedir a encomenda pelo WhatsApp com o nome que digitou.",
+  run(){storeScene();tLater(()=>scrollToEl(".cat-h","start"),100);typeSearch("Invictus",800);tLater(()=>scrollToEl(".cat-h","start"),800+8*140+120)},el:()=>[".search","#gridbox .nf"],dur:8000,noAutoScroll:true},
+ {t:"Instagram integrado",x:()=>"O botão do topo leva ao perfil da loja, para o cliente acompanhar as novidades e seguir.",
+  run(){storeScene();scrollTo({top:0});demoInstagram()},el:()=>[".demo .phone"],dur:7000},
+ {t:"Um painel simples",x:()=>"Uma única tela para cuidar do catálogo: buscar, cadastrar, editar e excluir perfumes. Acesso protegido por senha.",
+  run(){adminScene()},el:()=>[".a-top",".plist li:nth-child(1)",".plist li:nth-child(2)",".plist li:nth-child(3)"],dur:7000},
+ {t:"Disponível e promoção com um toque",x:()=>"Acabou o estoque? Desligue Disponível. Quer destacar um perfume? Ligue Promoção. A vitrine atualiza na hora.",
+  run(){adminScene();const k=liOf(p=>!p.promo),p=products[k-1];if(!p)return;const orig=p.promo;
+    const sel=`.plist li:nth-child(${k}) [data-act="t-promo"]`;
+    tLater(()=>{const b=$(sel);b&&b.click()},1600);
+    tLater(()=>{const b=$(sel);b&&b.click()},4600);
+    tour.cleanup=()=>{if(p.promo!==orig){p.promo=orig;renderList();renderStore()}}},
+  el:()=>{const k=liOf(p=>!p.promo);return[`.plist li:nth-child(${k})`]},dur:7500},
+ {t:"Cadastro em poucos cliques",x:()=>"Foto, nome, marca, volume, preço e descrição. A foto é reduzida automaticamente para o site continuar rápido.",
+  run(){adminScene();openForm(mainP());document.activeElement&&document.activeElement.blur()},el:()=>[".am"],dur:7000},
+ {t:"Acordes no cadastro",x:()=>"Toque nos acordes do perfume e arraste a barra para ajustar a intensidade. Fica exatamente como o cliente vê.",
+  run(){if(!$(".am")){adminScene();openForm(mainP())}document.activeElement&&document.activeElement.blur();tLater(()=>scrollToEl("#ae"),350)},el:()=>["#ae"],dur:7500,noAutoScroll:true},
+];
+
+const PLAY='<svg width="12" height="13" viewBox="0 0 10 11" fill="currentColor" aria-hidden="true"><path d="M1 0l9 5.5L1 11z"/></svg>';
+const PAUSE='<svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><rect x="1" width="3.5" height="12" rx="1"/><rect x="7.5" width="3.5" height="12" rx="1"/></svg>';
+const PREV='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+const NEXT='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+
+function cover(kind){
+  const bottles=products.slice(0,5).map((p,i)=>`<span style="animation-delay:${600+i*90}ms">${art(p,"cv"+kind+i)}</span>`).join("");
+  const ok='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>';
+  const html=kind==="start"?`
+    <div class="cv"><div class="mono-xl">${esc(settings.name.charAt(0))}</div>
+      <p class="caps" style="animation-delay:120ms">Apresentação do novo site</p>
+      <h2 style="animation-delay:200ms">${esc(settings.name)}</h2>
+      <p class="caps sub" style="animation-delay:260ms">${esc(settings.tagline)}</p>
+      <p class="lead" style="animation-delay:340ms">Uma vitrine elegante para fragrâncias de alto padrão, com pedidos pelo WhatsApp e um painel simples para você mesmo cuidar do catálogo.</p>
+      <div class="bottles" style="animation:none">${bottles}</div>
+      <div class="row" style="animation-delay:520ms"><button class="go" data-tour="begin">${PLAY} Iniciar apresentação</button><button class="alt" data-tour="close">Explorar sozinho</button></div>
+      <p class="time" style="animation-delay:600ms">${STEPS.length} etapas · cerca de 1 minuto e meio · passa sozinha</p></div>`
+   :`<div class="cv"><div class="mono-xl">${esc(settings.name.charAt(0))}</div>
+      <p class="caps" style="animation-delay:120ms">Fim da apresentação</p>
+      <h2 style="animation-delay:200ms;font-size:clamp(42px,8vw,72px)">Pronto para o ar</h2>
+      <ul class="check">${["Vitrine elegante, rápida e pensada para o celular","Pedidos e encomendas direto no WhatsApp","Acordes principais em cada perfume","Painel simples, com acesso por senha"].map((t,i)=>`<li style="animation-delay:${320+i*110}ms">${ok}<span>${t}</span></li>`).join("")}</ul>
+      <div class="row" style="animation-delay:820ms"><button class="go" data-tour="begin">${PLAY} Ver de novo</button><button class="alt" data-tour="close">Explorar o site</button></div></div>`;
+  $("#tour").innerHTML=`<div class="t-cover" role="dialog" aria-modal="true" aria-label="Apresentação">${html}</div>`;
+  document.body.style.overflow="hidden";
+}
+function hideCover(then){const c=$("#tour .t-cover");if(!c){then&&then();return}c.classList.add("out");setTimeout(()=>{$("#tour").innerHTML="";document.body.style.overflow="";then&&then()},450)}
+
+function tourStart(){
+  tour.on=true;tour.paused=false;document.body.classList.add("tour-on");
+  $("#tour").innerHTML=`<div class="t-block"></div><div class="t-spot" id="t-spot" style="left:50%;top:50%;width:0;height:0"></div><div class="t-card bottom" id="t-card" role="dialog" aria-live="polite" aria-label="Apresentação guiada"></div>`;
+  goStep(0);loop();
+}
+function stepCleanup(){tour.timers.forEach(clearTimeout);tour.timers=[];if(tour.cleanup){tour.cleanup();tour.cleanup=null}}
+function goStep(i){
+  stepCleanup();
+  if(i>=STEPS.length){tourEnd(true);return}
+  tour.i=Math.max(0,i);const st=STEPS[tour.i];
+  st.run();
+  if(!st.noAutoScroll)tLater(()=>{const sels=st.el();const el=sels.map(s=>$(s)).find(Boolean);if(!el)return;const r=el.getBoundingClientRect();if(r.top<60||r.bottom>innerHeight-20)el.scrollIntoView({behavior:"smooth",block:"center"})},450);
+  renderCard();
+}
+function renderCard(){
+  const st=STEPS[tour.i],n=STEPS.length,pad=x=>String(x).padStart(2,"0");
+  $("#t-card").innerHTML=`<div class="t-prog"><i id="t-bar" style="animation-duration:${st.dur}ms;animation-play-state:${tour.paused?"paused":"running"}"></i></div>
+    <div class="t-in"><p class="caps t-step anim">Etapa ${pad(tour.i+1)} de ${pad(n)}</p><h4 class="anim" style="animation-delay:60ms">${st.t}</h4><p class="tx anim" style="animation-delay:120ms">${st.x()}</p>
+    <div class="t-ctl"><div class="t-dots" aria-hidden="true">${STEPS.map((_,k)=>`<i class="${k===tour.i?"on":k<tour.i?"done":""}"></i>`).join("")}</div>
+    <div class="t-btns"><button class="t-exit" data-tour="exit">Sair</button><button class="t-ic" data-tour="prev" aria-label="Etapa anterior" ${tour.i===0?"disabled":""}>${PREV}</button><button class="t-ic" data-tour="pause" aria-label="${tour.paused?"Continuar":"Pausar"}">${tour.paused?PLAY:PAUSE}</button><button class="t-ic pri" data-tour="next" aria-label="Próxima etapa">${NEXT}</button></div></div></div>`;
+  $("#t-bar").addEventListener("animationend",()=>{if(tour.on&&!tour.paused)goStep(tour.i+1)},{once:true});
+}
+function setPaused(v){tour.paused=v;const b=$("#t-bar");if(b)b.style.animationPlayState=v?"paused":"running";const pb=$('[data-tour="pause"]');if(pb){pb.innerHTML=v?PLAY:PAUSE;pb.setAttribute("aria-label",v?"Continuar":"Pausar")}}
+function loop(){
+  if(!tour.on)return;
+  const spot=$("#t-spot"),card=$("#t-card");
+  if(spot&&card){
+    const rects=STEPS[tour.i].el().flatMap(s=>Array.from(document.querySelectorAll(s)).slice(0,1)).map(e=>e.getBoundingClientRect()).filter(r=>r.width>0&&r.height>0);
+    if(rects.length){
+      const pad=10,vw=innerWidth,vh=innerHeight;
+      let L=Math.min(...rects.map(r=>r.left))-pad,T=Math.min(...rects.map(r=>r.top))-pad,R=Math.max(...rects.map(r=>r.right))+pad,B=Math.max(...rects.map(r=>r.bottom))+pad;
+      L=Math.max(L,6);T=Math.max(T,6);R=Math.min(R,vw-6);B=Math.min(B,vh-6);
+      Object.assign(spot.style,{left:L+"px",top:T+"px",width:Math.max(0,R-L)+"px",height:Math.max(0,B-T)+"px",opacity:1});
+      const ch=card.offsetHeight,below=vh-B,above=T;
+      const pos=below>=ch+28?"bottom":above>=ch+70?"top":"bottom";
+      if(!card.classList.contains(pos)){card.classList.remove("top","bottom");card.classList.add(pos)}
+    }else spot.style.opacity=0;
+  }
+  tour.raf=requestAnimationFrame(loop);
+}
+function tourEnd(showEnd){
+  stepCleanup();tour.on=false;cancelAnimationFrame(tour.raf);document.body.classList.remove("tour-on");
+  closeDemo();closeLayer(false);resetSearch();
+  if(!$("#store").hidden)scrollTo({top:0});else show("store");
+  $("#tour").innerHTML="";
+  if(showEnd)cover("end");
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-tour]");if(!b)return;
+  const a=b.dataset.tour;
+  if(a==="begin")hideCover(tourStart);
+  else if(a==="close")hideCover(()=>{show("store")});
+  else if(a==="exit")tourEnd(false);
+  else if(a==="next")goStep(tour.i+1);
+  else if(a==="prev")goStep(tour.i-1);
+  else if(a==="pause")setPaused(!tour.paused);
+},true);
+document.addEventListener("keydown",e=>{
+  if(!tour.on)return;
+  if(e.key==="Escape"){e.stopImmediatePropagation();tourEnd(false)}
+  else if(e.key==="ArrowRight"){e.preventDefault();goStep(tour.i+1)}
+  else if(e.key==="ArrowLeft"){e.preventDefault();goStep(tour.i-1)}
+  else if(e.key===" "){e.preventDefault();setPaused(!tour.paused)}
+},true);
+$("#tour-start").addEventListener("click",()=>{if(tour.on)tourEnd(false);cover("start")});
+if(location.hash!=="#painel")cover("start");
+})();
+</script>
+
+</body>
+</html>
